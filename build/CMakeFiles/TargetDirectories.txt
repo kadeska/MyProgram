@@ -1,3 +1,0 @@
-C:/Users/Herna/Dev/MyProgram/build/CMakeFiles/MyProgram.dir
-C:/Users/Herna/Dev/MyProgram/build/CMakeFiles/edit_cache.dir
-C:/Users/Herna/Dev/MyProgram/build/CMakeFiles/rebuild_cache.dir
