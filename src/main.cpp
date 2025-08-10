@@ -6,11 +6,14 @@
 
 int main(int argc, char const *argv[])
 {
-    // print out the cpp version 
-    std::cout << __cplusplus << std::endl;
-    
     // Initialize helper class
     Helper helper;
+
+    // print out the cpp version 
+    // std::cout << __cplusplus << std::endl;
+    helper.logDebug("CPP Version: " + std::to_string(__cplusplus));
+    
+    
 
     // Initialize IOmanager
     IOmanager io_manager(argc, argv, helper);
