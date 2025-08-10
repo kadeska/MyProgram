@@ -19,16 +19,17 @@ int main(int argc, char const *argv[])
     {
     case eNull:
         // If the check results are eNull then fail
-        helper.log("[ERROR] IOManager check failed.");
+        helper.logError("IOManager check failed.");
         break;
     
     case eClient:
-    helper.log("[ERROR] IOManager check failed.");
+    helper.logDebug("IOManager check succeeded.");
         break;
     case eServer:
-    helper.log("[ERROR] IOManager check failed.");
+    helper.logDebug("IOManager check succeeded.");
         break;
     case eTest:
+    helper.logDebug("IOManager check succeeded.");
         break;
     default:
         // this case would only acure if there was un uncought valid command. 

@@ -2,7 +2,10 @@
 
 #include <string>
 
-
+/**
+ * This is an enum representation 
+ * of the available commands.
+ */
 enum command {
     eNull,
     eServer,
@@ -10,5 +13,9 @@ enum command {
     eTest
 };
 
+/**
+ * Hash function for taking a argument/command
+ * as string and converts it to an enum.
+ */
 command hashit (std::string const& inString);
 

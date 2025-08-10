@@ -8,7 +8,7 @@ IOmanager::IOmanager(int argc, const char *argv[], Helper& helper_ref)
     data.argc = argc;
     if (argc - 1 > MAX_ARGS)
     {
-        helper.log("[Warning] Too many arguments given. Max arguments is set at: " + std::to_string(MAX_ARGS));
+        helper.logWarning("Too many arguments given. Max arguments is set at: " + std::to_string(MAX_ARGS));
         ready = false;
     } 
     else 
@@ -16,7 +16,7 @@ IOmanager::IOmanager(int argc, const char *argv[], Helper& helper_ref)
         ready = true;
         helper.printArgs(argc, argv);
         for (int i = 0; i < argc; ++i) {
-            // helper.log("[DEBUG] Command line arg " + std::to_string(i) + ": '" + commandLineArgs.back() + "' (Length: " + std::to_string(commandLineArgs.back().length()) + ")");
+            // helper.logDebug("Command line arg " + std::to_string(i) + ": '" + commandLineArgs.back() + "' (Length: " + std::to_string(commandLineArgs.back().length()) + ")");
             data.commandLineArgs.push_back(argv[i]);
         }
     }
@@ -28,19 +28,20 @@ bool IOmanager::readFileContent(std::string filename) {
     std::ifstream inputFile(filename);
 
     if (!inputFile.is_open()) {
-        std::cerr << "Error: Could not open file " << filename << std::endl;
+        // std::cerr << "Error: Could not open file " << filename << std::endl;
+        helper.logError("Could not open file: " + filename);
         return false;
     }
 
-    helper.log("[INFO] Storing arguments...");
+    helper.logInfo("Storing arguments...");
     std::string line;
     while (std::getline(inputFile, line)) {
-        helper.log("[DEBUG] Read line from file: '" + line + "' (Length: " + std::to_string(line.length()) + ")");
+        helper.logDebug("Read line from file: '" + line + "' (Length: " + std::to_string(line.length()) + ")");
         data.availableArgs.push_back(line);
     }
 
     inputFile.close();
-    helper.log("[INFO] Done storing argument.");
+    helper.logInfo("Done storing argument.");
     
     return true;
 }
@@ -54,28 +55,28 @@ command IOmanager::check()
         for(int i = 0; i < data.argc - 1; i++) 
         {
             std::string curent(data.commandLineArgs[i + 1]); // 'data.commandLineArgs[i + 1]' I do (i + 1) to skip the first arg, being the program name.
-            helper.log(curent);
+            helper.logDebug(curent);
 
             switch (hashit(curent))
             {
                 case eServer:
-                    helper.log("Match");
+                    helper.logDebug("Match");
                     return eServer;
                     break;
             
                 case eClient:
-                    helper.log("Match");
+                    helper.logDebug("Match");
                     return eClient;
                     break;
 
                 case eTest:
-                    helper.log("Match");
+                    helper.logDebug("Match");
                     return eTest;
                     break;
             
                 default:
                     /* not a match */
-                    helper.log("Not a match. Or uncuaght argument. If a new command was added, please make sure to update the IOmanager::check() function, and the main function, as well as the hashit function and the enums. All must be updated.");
+                    helper.logWarning("Not a match. Or uncuaght argument. If a new command was added, please make sure to update the IOmanager::check() function, and the main function, as well as the hashit function and the enums. All must be updated.");
                     return eNull;
                     break;
             }

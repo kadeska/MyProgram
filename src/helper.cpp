@@ -30,6 +30,11 @@ void Helper::logInfo(std::string logMsg)
     std::cout << "[Info]" << " " << logMsg << std::endl;
 }
 
+void Helper::logDebug(std::string logMsg)
+{
+    std::cout << "[Debug]" << " " << logMsg << std::endl;
+}
+
 void Helper::logRaw(std::string logMsg)
 {
     std::cout << logMsg << std::endl;
