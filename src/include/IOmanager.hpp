@@ -10,7 +10,7 @@
 
 
 
-const unsigned int MAX_ARGS = 2;
+const unsigned int MAX_ARGS = 1;
 
 /**
  * Input/Output data
