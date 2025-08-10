@@ -9,11 +9,34 @@ Helper::~Helper()
 {
     std::cout << "helper destructor" << std::endl;
 }
+
 void Helper::log(std::string logMsg)
 {
-    std::cout << "[log]" << " " << logMsg << std::endl;
+    std::cout << "[Log]" << " " << logMsg << std::endl;
 }
-void Helper::printArgs(int argc, const char *argv[]){
+
+void Helper::logError(std::string logMsg)
+{
+    std::cout << "[Error]" << " " << logMsg << std::endl;
+}
+
+void Helper::logWarning(std::string logMsg)
+{
+    std::cout << "[Warning]" << " " << logMsg << std::endl;
+}
+
+void Helper::logInfo(std::string logMsg)
+{
+    std::cout << "[Info]" << " " << logMsg << std::endl;
+}
+
+void Helper::logRaw(std::string logMsg)
+{
+    std::cout << logMsg << std::endl;
+}
+
+void Helper::printArgs(int argc, const char *argv[])
+{
     for (int i = 0; i < argc; i++)
     {
         /* code */
