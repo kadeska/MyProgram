@@ -75,7 +75,7 @@ command IOmanager::check()
             
                 default:
                     /* not a match */
-                    helper.log("Not a match. Or uncuaght argument. If a new command was added, please make sure to update the IOmanager::check() function, and the main function.");
+                    helper.log("Not a match. Or uncuaght argument. If a new command was added, please make sure to update the IOmanager::check() function, and the main function, as well as the hashit function and the enums. All must be updated.");
                     return eNull;
                     break;
             }
