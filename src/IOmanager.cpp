@@ -30,6 +30,9 @@ bool IOmanager::readFileContent(std::string filename) {
     if (!inputFile.is_open()) {
         // std::cerr << "Error: Could not open file " << filename << std::endl;
         helper.logError("Could not open file: " + filename);
+        helper.logWarning("File either doesnt exist or is not named corectly. Please make sure file"  
+                          " is named 'AvailableArgs.txt', or if available args file is not not needed," 
+                          " then specify '--nofile' as the only argument");
         return false;
     }
 
@@ -81,6 +84,13 @@ command IOmanager::check()
                     break;
             }
         }
+    }
+
+    // This if statement is only reached if the file fails to be read.
+    if(data.commandLineArgs[1] == "--nofile")
+    {
+        helper.logDebug("NoFile");
+        return eNofile;
     }
 
 

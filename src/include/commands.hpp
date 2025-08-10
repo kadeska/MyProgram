@@ -8,6 +8,7 @@
  */
 enum command {
     eNull,
+    eNofile,
     eServer,
     eClient,
     eTest

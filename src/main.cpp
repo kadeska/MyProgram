@@ -24,6 +24,10 @@ int main(int argc, char const *argv[])
         // If the check results are eNull then fail
         helper.logError("IOManager check failed.");
         break;
+
+    case eNofile:
+        helper.logDebug("Working with no args file.");
+        break;
     
     case eClient:
     helper.logDebug("IOManager check succeeded.");
