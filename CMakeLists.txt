@@ -1,17 +1,27 @@
-cmake_minimum_required(VERSION 3.10) # Specifies the minimum required CMake version
+cmake_minimum_required(VERSION 3.10)
 
-project(MyProgram VERSION 1.0)  # Set project name and version
+project(MyProgram VERSION 1.0)
 
-# Set C++ standard to C++20
-set(CMAKE_CXX_STANDARD 23)
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Specify the include directory for header files
+# Specify include directories
 include_directories(${CMAKE_SOURCE_DIR}/src/include)
+include_directories(${CMAKE_SOURCE_DIR}/external/asio)
 
-# Add executable target with the source files
+# Add the executable and source files
 add_executable(MyProgram 
     src/main.cpp
     src/helper.cpp
     src/IOmanager.cpp
     src/commands.cpp
 )
+
+# Define ASIO_STANDALONE for the compiler
+target_compile_definitions(MyProgram PRIVATE ASIO_STANDALONE)
+
+# Link with ws2_32 for Windows sockets support
+if (WIN32)
+    target_link_libraries(MyProgram PRIVATE ws2_32)
+endif()

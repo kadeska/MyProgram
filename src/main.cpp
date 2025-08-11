@@ -4,6 +4,10 @@
 #include "include/IOmanager.hpp"
 #include "include/helper.hpp"
 
+// #define ASIO_STANDALONE
+#include <asio.hpp>
+
+
 int main(int argc, char const *argv[])
 {
     // Initialize helper class
@@ -31,13 +35,18 @@ int main(int argc, char const *argv[])
     
     case eClient:
     helper.logDebug("IOManager check succeeded.");
+    // start client
         break;
+
     case eServer:
     helper.logDebug("IOManager check succeeded.");
+    // start server
         break;
+
     case eTest:
     helper.logDebug("IOManager check succeeded.");
         break;
+
     default:
         // this case would only acure if there was un uncought valid command. 
         // Such as if I added a command in the AvailableArgs file but didnt 
