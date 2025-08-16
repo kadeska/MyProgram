@@ -3,6 +3,9 @@
 #include "include/commands.hpp"
 #include "include/IOmanager.hpp"
 #include "include/helper.hpp"
+#include "include/timer.hpp"
+#include "include/client.hpp"
+#include "include/server.hpp"
 
 // #define ASIO_STANDALONE
 #include <asio.hpp>
@@ -36,15 +39,20 @@ int main(int argc, char const *argv[])
     case eClient:
     helper.logDebug("IOManager check succeeded.");
     // start client
+    client(argc, argv, helper);
         break;
 
     case eServer:
     helper.logDebug("IOManager check succeeded.");
     // start server
+    server();
         break;
 
     case eTest:
     helper.logDebug("IOManager check succeeded.");
+    foo_async();
+    // foo_sync();
+    // client(argc, argv);
         break;
 
     default:

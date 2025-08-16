@@ -52,9 +52,12 @@ bool IOmanager::readFileContent(std::string filename) {
 command IOmanager::check()
 {
 
-    if(readFileContent("AvailableArgs.txt")) // read the file
-    {
-        // here I do 'data.argc - 1' because otherwise I get an 'std::length_error' 
+    // if(readFileContent("AvailableArgs.txt")) // read the file
+    // {
+        
+    // }
+
+    // here I do 'data.argc - 1' because otherwise I get an 'std::length_error' 
         for(int i = 0; i < data.argc - 1; i++) 
         {
             std::string curent(data.commandLineArgs[i + 1]); // 'data.commandLineArgs[i + 1]' I do (i + 1) to skip the first arg, being the program name.
@@ -84,7 +87,6 @@ command IOmanager::check()
                     break;
             }
         }
-    }
 
     // This if statement is only reached if the file fails to be read.
     if(data.commandLineArgs[1] == "--nofile")

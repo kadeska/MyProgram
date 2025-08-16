@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(MyProgram VERSION 1.0)
 
 # Set C++ standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Specify include directories
@@ -16,6 +16,9 @@ add_executable(MyProgram
     src/helper.cpp
     src/IOmanager.cpp
     src/commands.cpp
+    src/client.cpp
+    src/server.cpp
+    src/timer.cpp
 )
 
 # Define ASIO_STANDALONE for the compiler
