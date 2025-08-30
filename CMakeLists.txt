@@ -1,17 +1,8 @@
-cmake_minimum_required(VERSION 3.10)
-
+cmake_minimum_required(VERSION 3.24)
 project(MyProgram VERSION 1.0)
 
-# Set C++ standard
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Specify include directories
-include_directories(${CMAKE_SOURCE_DIR}/src/include)
-include_directories(${CMAKE_SOURCE_DIR}/external/asio)
-
-# Add the executable and source files
-add_executable(MyProgram 
+# Add the executable and source files first. This creates the 'MyProgram' target.
+add_executable(MyProgram
     src/main.cpp
     src/helper.cpp
     src/IOmanager.cpp
@@ -19,12 +10,31 @@ add_executable(MyProgram
     src/client.cpp
     src/server.cpp
     src/timer.cpp
+    src/networkManager.cpp
 )
 
-# Define ASIO_STANDALONE for the compiler
-target_compile_definitions(MyProgram PRIVATE ASIO_STANDALONE)
+# Now set properties on the target, since it now exists.
+set_property(TARGET MyProgram PROPERTY CXX_STANDARD 23)
+set_property(TARGET MyProgram PROPERTY CXX_STANDARD_REQUIRED ON)
 
-# Link with ws2_32 for Windows sockets support
+# Specify include directories for the target using a target-specific command.
+target_include_directories(MyProgram PRIVATE
+    src/include
+    external/asio
+)
+
+# Add compile definitions to the target. Use the "target_compile_definitions" command.
+# The definitions are private to the target's compilation.
+target_compile_definitions(MyProgram PRIVATE
+    _WIN32_WINNT=0x0A00
+    ASIO_STANDALONE
+)
+
+# Link with required libraries. These links are also private to the target.
 if (WIN32)
-    target_link_libraries(MyProgram PRIVATE ws2_32)
+    target_link_libraries(MyProgram PRIVATE
+        ws2_32
+        mswsock
+    )
 endif()
+
