@@ -1,41 +1,74 @@
 #include "include/client.hpp"
-
+#include <chrono>
 
 using asio::ip::tcp;
 
-int client(int argc, char const *argv[], Helper helper) {
-    try
-    {
-        if (argc != 2) {
-            std::cerr << "Usage: client <host>" << std::endl;
-            return 1;
-        }
-        asio::io_context io_context;
-        tcp::resolver resolver(io_context);
-        // tcp::resolver::results_type endpoints = resolver.resolve(argv[1], "daytime");
-        tcp::resolver::results_type endpoints = resolver.resolve("localhost", "daytime");
-        tcp::socket socket(io_context);
+TcpClient::TcpClient(asio::io_context& io_context, const std::string& host, const std::string& port)
+    : io_context_(io_context),
+      host_(host),
+      port_(port) {}
+
+void TcpClient::run() {
+    try {
+        tcp::resolver resolver(io_context_);
+        tcp::resolver::results_type endpoints = resolver.resolve(host_, port_);
+
+        tcp::socket socket(io_context_);
         asio::connect(socket, endpoints);
+
+        // Send a request to the server
+        std::string client_message = "Client: Asking for data.\n";
+        asio::write(socket, asio::buffer(client_message));
+
+        // Read the server's response
+        asio::error_code error;
+        asio::streambuf response_buf;
+        asio::read_until(socket, response_buf, '\n', error);
         
-        for (;;)
-        {
-            std::array<char, 128> buf;
-            std::error_code error;
-            size_t len = socket.read_some(asio::buffer(buf), error);
-            if (error == asio::error::eof)
-            break; // Connection closed cleanly by peer.
-            else if (error)
-            throw std::system_error(error); // Some other error.
-            std::string str(buf.data()); // = buf.data();
-            // std::cout.write(buf.data(), len);
-            helper.logInfo(str);
+        if (error && error != asio::error::eof) {
+            throw asio::system_error(error);
         }
-    }
-    catch (std::exception& e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
 
-    return 0;
+        std::istream response_stream(&response_buf);
+        std::string response_message;
+        std::getline(response_stream, response_message);
+        std::cout << "Received from server: " << response_message << std::endl;
 
+    } catch (std::exception& e) {
+        std::cerr << "Client exception: " << e.what() << std::endl;
+    }
 }
+
+void TcpClient::run(std::string msg) {
+    try {
+        tcp::resolver resolver(io_context_);
+        tcp::resolver::results_type endpoints = resolver.resolve(host_, port_);
+
+        tcp::socket socket(io_context_);
+        asio::connect(socket, endpoints);
+
+        // Send a request to the server
+        // std::string client_message = "Client: Asking for data.\n";
+        asio::write(socket, asio::buffer(msg));
+
+        // Read the server's response
+        asio::error_code error;
+        asio::streambuf response_buf;
+        asio::read_until(socket, response_buf, '\n', error);
+        
+        if (error && error != asio::error::eof) {
+            throw asio::system_error(error);
+        }
+
+        std::istream response_stream(&response_buf);
+        std::string response_message;
+        std::getline(response_stream, response_message);
+        std::cout << "Received from server: " << response_message << std::endl;
+        proccessData(response_message);
+
+    } catch (std::exception& e) {
+        std::cerr << "Client exception: " << e.what() << std::endl;
+    }
+}
+
+bool TcpClient::proccessData(std::string data) {return true;}
