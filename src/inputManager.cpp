@@ -78,7 +78,7 @@ int printPrompt(Helper& helper)
 void selectMode(Helper& helper) 
 {
 	modeSelection = true;
-	helper.logInfo("Mode selection not implemented yet.");
+	helper.logInfo("Mode selection not fully implemented yet.");
     while (modeSelection) 
     {
         helper.logRaw("Select mode (server/client/default) > ");
@@ -104,7 +104,7 @@ void selectMode(Helper& helper)
             waitLoop = false;
         }
         else {
-            helper.logWarning("Invalid mode. Please enter 'server', 'client', or 'exit'.");
+            helper.logWarning("Invalid mode. Please enter 'server', 'client', 'default', or 'exit'.");
 		}
     }
 

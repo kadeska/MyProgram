@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 
 #include "include/commands.hpp"
 #include "include/IOmanager.hpp"
@@ -10,6 +11,7 @@
 #include "include/helper.hpp"
 #include "include/inputManager.hpp"
 
+
 // #define ASIO_STANDALONE
 #include <asio.hpp>
 
@@ -18,11 +20,24 @@ Helper helper;
 
 bool client(asio::io_context& io_context);
 
-
+const std::filesystem::path logFile = "data/log.txt";
+const std::filesystem::path configFile = "data/config.ini";
 
 enum Role { UNKNOWN, SERVER, CLIENT };
 
-int main(int argc, char* argv[]) {
+int main(int argc, const char* argv[]) {
+
+	IOmanager ioMan(argc, argv, helper);
+    //ioMan.test();
+	
+    if (ioMan.writeFileFromExePath(logFile, "Log file created.\n", FileWriteMode::Overwrite)) {
+        std::cout << "Successfully created data/log.txt" << std::endl;
+    }
+    if (ioMan.writeFileFromExePath(configFile, "setting=value\nversion=1.0", FileWriteMode::Overwrite)) {
+        std::cout << "Successfully created data/config.ini" << std::endl;
+    }
+    ioMan.readFileContent(configFile.string());
+    ioMan.readFileContent(logFile.string());
     if (argc < 2) {
         //std::cerr << "Usage: MyProgram <server|client>\n";
 		helper.logError("Not enough or no arguments provided.");

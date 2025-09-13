@@ -18,16 +18,21 @@ const unsigned int MAX_ARGS = 1;
  */
 struct IO_Data {
     /* data */
-    // char *argv[MAX_ARGS + 1];
-    std::vector<std::string> commandLineArgs;
-    int argc;
-    // std::string availableArgs[MAX_ARGS + 10];
-    std::vector<std::string> availableArgs;
+    //// char *argv[MAX_ARGS + 1];
+    //std::vector<std::string> commandLineArgs;
+    //int argc;
+    //// std::string availableArgs[MAX_ARGS + 10];
+    //std::vector<std::string> availableArgs;
 };
 
 struct givenArgument {
     std::string argument = "";
     bool isValid = false;
+};
+
+enum class FileWriteMode {
+    Overwrite,
+    Append
 };
 
 class Helper;
@@ -44,11 +49,10 @@ public:
      * If the proper amount of arguments are not given then the program will halt.
      * If there are no arguments given then the program will run without arguments. 
      */
-    IOmanager(int argc, const char *argv[], Helper& helper_ref);
+    IOmanager(int argc, const char* argv[], Helper& helper_ref);
     
     /**
-     * read a file containing available commands and return true if file reads succesfully.
-     * Creates an array of available args 
+	 * read a config file containing config options and return true if file reads succesfully.
      * 
      * */ 
     bool readFileContent(std::string filename);
@@ -61,6 +65,10 @@ public:
      * 
      */
     command check();
+
+    int test();
+    bool writeFileFromExePath(const std::filesystem::path& relativePath, const std::string& contents, FileWriteMode mode);
+    std::filesystem::path getExecutableDirectory();
 
 private:
     // std::vector<std::string> commandLineArgs;
