@@ -8,3 +8,8 @@ Some console app
 * Generate 2D maps
 * Generate characters
 * Launch game
+
+
+## Build and Run
+* Build with CMake
+* Run executable with or without arguments <server/client>. 
