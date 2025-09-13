@@ -64,7 +64,8 @@ void TcpClient::run(std::string msg) {
         std::string response_message;
         std::getline(response_stream, response_message);
         std::cout << "Received from server: " << response_message << std::endl;
-        proccessData(response_message);
+        //if (proccessData(response_message)) {}
+        
 
     } catch (std::exception& e) {
         std::cerr << "Client exception: " << e.what() << std::endl;
@@ -72,3 +73,26 @@ void TcpClient::run(std::string msg) {
 }
 
 bool TcpClient::proccessData(std::string data) {return true;}
+
+int TcpClient::waitForInput(Helper helper)
+{
+    std::cout << "testing" << std::endl;
+    try {
+        helper.logInfo("waiting");
+        if (waitLoop == false) {
+            waitLoop = true;
+            helper.logInfo("Entering wait loop. Type 'exit' to quit.");
+        }
+        while (waitLoop) {
+            helper.logInfo("Please enter something > ");
+            std::string entry;
+            std::getline(std::cin, entry);
+            helper.logInfo("You entered: " + entry);
+        }
+    } catch (std::exception& e) {
+        std::cerr << "Client exception: " << e.what() << std::endl;
+	}
+    
+    
+    return 0;
+}

@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.24)
 project(MyProgram VERSION 1.0)
 
+# add_subdirectory(MyProgram)
+
+
 # Add the executable and source files first. This creates the 'MyProgram' target.
 add_executable(MyProgram
     src/main.cpp

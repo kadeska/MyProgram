@@ -13,7 +13,8 @@ class TcpServer {
 public:
     TcpServer(asio::io_context& io_context, Helper mHelper);
     void run();
-    std::string generateData(int seed);
+    std::string generateRandInt(int seed);
+    // std::string generate
 
 private:
     Helper helper;

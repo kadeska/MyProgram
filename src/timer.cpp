@@ -3,6 +3,7 @@
 
 
 int foo_sync() {
+	std::cout << "Starting synchronous wait for 5 seconds..." << std::endl;
     asio::io_context io;
     asio::steady_timer t(io, asio::chrono::seconds(5));
     t.wait();
@@ -11,6 +12,7 @@ int foo_sync() {
 }
 
 int foo_async() {
+	std::cout << "Starting asynchronous wait for 5 seconds..." << std::endl;
     asio::io_context io;
     asio::steady_timer t(io, asio::chrono::seconds(5));
     t.async_wait(&print);

@@ -22,7 +22,7 @@ void TcpServer::run() {
     }
 }
 
-std::string TcpServer::generateData(int seed)
+std::string TcpServer::generateRandInt(int seed)
 {
     // 1. Obtain a random device for seeding
     std::random_device rd;
@@ -59,7 +59,7 @@ void TcpServer::handle_client(tcp::socket& socket) {
         // proccess message
 
         // Send a response back to the client
-        std::string response_message = generateData(3); // "123,456,789\n";
+        std::string response_message = generateRandInt(3); // "123,456,789\n";
         asio::write(socket, asio::buffer(response_message), error);
 
         if (error) {
