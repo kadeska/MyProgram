@@ -111,7 +111,7 @@ void Helper::logDebug(std::string logMsg)
 
 void Helper::logRaw(std::string logMsg)
 {
-    std::cout << logMsg << std::endl;
+    std::cout << logMsg;
 }
 
 void Helper::printArgs(int argc, const char *argv[])

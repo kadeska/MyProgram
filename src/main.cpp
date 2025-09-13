@@ -8,22 +8,26 @@
 #include "include/server.hpp"
 
 #include "include/helper.hpp"
+#include "include/inputManager.hpp"
 
 // #define ASIO_STANDALONE
 #include <asio.hpp>
 
 Helper helper;
 
-bool client(asio::io_context& io_context);
-int waitForInput(Helper helper);
 
-bool waitLoop = false;
+bool client(asio::io_context& io_context);
+
+
 
 enum Role { UNKNOWN, SERVER, CLIENT };
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        std::cerr << "Usage: MyProgram <server|client>\n";
+        //std::cerr << "Usage: MyProgram <server|client>\n";
+		helper.logError("Not enough or no arguments provided.");
+		helper.logError("Usage: MyProgram <server|client>. Entering default mode.");
+        //printPrompt(helper);
         waitForInput(helper);
 		//foo_sync();
 		
@@ -75,24 +79,4 @@ bool client(asio::io_context& io_context){
     client.run("hello server.\n");
 	
     return true;
-}
-
-int waitForInput(Helper helper)
-{
-    std::cout << "testing" << std::endl;
-
-    helper.logInfo("waiting");
-    if (waitLoop == false) {
-        waitLoop = true;
-        helper.logInfo("Entering wait loop. Type 'exit' to quit.");
-    }
-    while (waitLoop) {
-        helper.logInfo("Please enter something > ");
-        std::string entry;
-        std::getline(std::cin, entry);
-        helper.logInfo("You entered: " + entry);
-    }
-
-
-    return 0;
 }

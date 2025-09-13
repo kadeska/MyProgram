@@ -14,7 +14,7 @@ add_executable(MyProgram
     src/server.cpp
     src/timer.cpp
     src/networkManager.cpp
-)
+ "src/inputManager.cpp")
 
 # Now set properties on the target, since it now exists.
 set_property(TARGET MyProgram PROPERTY CXX_STANDARD 23)
