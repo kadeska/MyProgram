@@ -95,42 +95,5 @@ command IOmanager::check()
         return eNofile;
     }
 
-
-    // old method below this line
-
-
-    // if (readFileContent("AvailableArgs.txt")) {
-    //     // Iterate through each command-line argument
-    //     for (const std::string& currentArg : data.commandLineArgs) {
-    //         if (currentArg.empty()) continue; // Skip empty command line args
-
-    //         // push currentArg into currentArguments struct array
-    //         givenArg.argument = currentArg;
-    //         // givenArg.isValid = false; // false by default
-    //         givenArgs.push_back(givenArg);
-
-
-    //         // Compare against each available argument
-    //         for (const std::string& availableArg : data.availableArgs) {
-    //             if (!availableArg.empty()) { // Check for empty strings from availableArgs.txt
-    //                 if (availableArg == currentArg) { // Check if an available argument matches with the current argument. 
-    //                     helper.log("[INFO] MATCH!! '" + currentArg + "' matched available: '" + availableArg + "'");
-    //                     // If you only care if *any* match exists for *this* commandLineArg,
-    //                     // you might break here or return true if it's the only check you need.
-    //                     // Or, if you need to find all matches, continue the inner loop.
-    //                     break;
-    //                 } else if (availableArg != currentArg) {
-    //                     helper.log("[WARNING] Invalid argument given: " + currentArg);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     // if there are any invalid given arguments then print them out here.
-    //     // if(){} 
-    //     for(auto data : givenArgs){
-    //     helper.log("GivenArgs: " + data.argument);
-    //     }
-    //     return true;
-    // }
     return eNull;
 }
