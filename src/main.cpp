@@ -11,9 +11,16 @@
 #include "include/helper.hpp"
 #include "include/inputManager.hpp"
 
+// SDL3 window
+#include "include/window.hpp"
+
 
 // #define ASIO_STANDALONE
 #include <asio.hpp>
+
+//#include <SDL3/SDL.h>
+//#include <SDL_main.h>
+
 
 Helper helper;
 
@@ -24,6 +31,17 @@ const std::filesystem::path logFile = "data/log.txt";
 const std::filesystem::path configFile = "data/config.ini";
 
 enum Role { UNKNOWN, SERVER, CLIENT };
+
+//int main(int argc, char* argv[]) {
+//    // Your previous main() code here
+//    if(!SDL_Init(SDL_INIT_VIDEO)) {
+//        helper.logInfo("SDL initialized successfully.");
+//    } else {
+//        helper.logError(std::string("SDL initialization failed: ") + SDL_GetError());
+//        return 1;
+//	}
+//    return 0;
+//}
 
 int main(int argc, const char* argv[]) {
 
@@ -54,9 +72,18 @@ int main(int argc, const char* argv[]) {
     if (role_str == "server") {
         helper.logInfo("Starting server...");
         role = SERVER;
-    } else if (role_str == "client") {
+    } 
+    if (role_str == "client") {
         helper.logInfo("Starting client...");
         role = CLIENT;
+    }
+    if (role_str == "game") {
+        helper.logInfo("Starting game...");
+        Window window;
+        if (window.init("My SDL3 Window", 800, 600)) {
+            window.mainLoop();
+            window.cleanup();
+        }
     }
 
     try {

@@ -1,4 +1,6 @@
 #include "include/inputManager.hpp"
+// SDL3 window
+#include "include/window.hpp"
 
 bool waitLoop = false;
 bool modeSelection = false;
@@ -21,7 +23,6 @@ int waitForInput(Helper& helper)
         std::cout << std::flush;
         // Use std::getline to read the entire line of user input, including spaces
         std::getline(std::cin, entry);
-		//printPrompt(helper);
         if (!processInput(entry, helper)) 
         {
             // go into mode selection.
@@ -51,12 +52,25 @@ bool processInput(std::string& input, Helper& helper)
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
                 char tile = (rand() % 2 == 0) ? '.' : '#'; // Randomly choose between '.' and '#'
+                // write to a file
                 std::cout << tile << ' ';
             }
             std::cout << std::endl;
         }
 		return true;
     }
+    if (input == "server") { helper.logInfo("Launching server..."); }
+    if (input == "client") { helper.logInfo("Launching client"); }
+
+	if (input == "game") { 
+        helper.logInfo("Launching game..."); 
+        Window window;
+        if (window.init("My SDL3 Window", 800, 600)) {
+            window.mainLoop();
+            window.cleanup();
+        }
+    }
+
     else {
         helper.logInfo("You entered: " + input);
         return true;
