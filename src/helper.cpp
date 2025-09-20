@@ -86,32 +86,42 @@ Helper::~Helper()
 
 void Helper::log(std::string logMsg)
 {
-    std::cout << "[Log]" << " " << logMsg << std::endl;
+    //std::cout << "[Log]" << " " << logMsg << std::endl;
+    logRaw("[Log] " + logMsg + '\n');
 }
 
 void Helper::logError(std::string logMsg)
 {
-    std::cout << "\033[31m" << "[Error]" << " " << logMsg << "\033[0m" << std::endl;
+    //std::cout << "\033[31m" << "[Error]" << " " << logMsg << "\033[0m" << std::endl;
+    logRaw("\033[31m [Error] " + logMsg + "\033[0m \n", logLevel.error);
 }
 
 void Helper::logWarning(std::string logMsg)
 {
-    std::cout << "\033[33m" << "[Warning]" << " " << logMsg << "\033[0m" << std::endl;
+    //std::cout << "\033[33m" << "[Warning]" << " " << logMsg << "\033[0m" << std::endl;
+    logRaw("\033[33m [Warning] " + logMsg + "\033[0m \n", logLevel.warning);
 }
 
 void Helper::logInfo(std::string logMsg)
 {
-    std::cout << "\033[37m" << "[Info]" << " " << logMsg << "\033[0m" << std::endl;
+    //std::cout << "\033[37m" << "[Info]" << " " << logMsg << "\033[0m" << std::endl;
+	logRaw("\033[37m [Info] " + logMsg + "\033[0m \n", logLevel.info);
 }
 
 void Helper::logDebug(std::string logMsg)
 {
-    std::cout << "\033[32m" << "[Debug]" << " " << logMsg << "\033[0m" << std::endl;
+    //std::cout << "\033[32m" << "[Debug]" << " " << logMsg << "\033[0m" << std::endl;
+    logRaw("\033[32m [Debug] " + logMsg + "\033[0m \n", logLevel.debug);
 }
 
-void Helper::logRaw(std::string logMsg)
+void Helper::logRaw(std::string logMsg, bool logLevel)
 {
-    std::cout << logMsg;
+    if (logLevel) {
+        std::cout << logMsg;
+        return;
+    }
+    std::cout << "skip \n";
+    
 }
 
 void Helper::printArgs(int argc, const char *argv[])
