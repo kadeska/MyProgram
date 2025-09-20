@@ -49,7 +49,7 @@ enum Role { UNKNOWN, SERVER, CLIENT };
 int main(int argc, const char* argv[]) {
 	helper = new Helper();
     ioMan = new IOmanager(argc, argv, *helper);
-	mapGen = new mapGenerator(ioMan);
+	mapGen = new mapGenerator(ioMan, helper);
 	inputMan = new inputManager(helper, ioMan, mapGen);
 
 

@@ -4,16 +4,20 @@
 #include <filesystem>
 
 #include "IOmanager.hpp"
+#include "helper.hpp"
 
 
 class mapGenerator {
     private:
 		IOmanager* ioMan;
+		Helper* helper;
 		const std::string mapFile = "data/map.txt";
 		// seed increases chances of solid tile. Higher seed = more solid tiles.
 		// e.g. seed = 1 means all tiles are solid, seed = 10 means 1 in 10 tiles are empty.
 		uint16_t seed = 4;
 		uint16_t lootChance = 10; // percentage
+
+		std::string currentMap = "";
 
 		struct _tile {
 			char type = ' '; // e.g. '.', '#', 'L' (loot)
@@ -28,7 +32,7 @@ class mapGenerator {
 
 
 	public:
-	mapGenerator(IOmanager* ioManager);
+	mapGenerator(IOmanager* _ioManager, Helper* _helper);
 	~mapGenerator();
 	void generateMap(int width, int height);
 	void printMap();

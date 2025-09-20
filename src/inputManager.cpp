@@ -57,7 +57,7 @@ bool inputManager::processInput(std::string& input)
         return false;
     }
     if (input == "map") {
-        helper->logInfo("Generating random map...");
+        //helper->logInfo("Generating random map...");
         // Generate and display a random map (for demonstration purposes, we'll just print a message)
 		mapGen->generateMap(10, 10);
 		return true;
