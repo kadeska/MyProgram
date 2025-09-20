@@ -22,7 +22,10 @@
 //#include <SDL_main.h>
 
 
-Helper helper;
+Helper* helper;
+IOmanager* ioMan;
+inputManager* inputMan;
+mapGenerator* mapGen;
 
 
 bool client(asio::io_context& io_context);
@@ -44,24 +47,28 @@ enum Role { UNKNOWN, SERVER, CLIENT };
 //}
 
 int main(int argc, const char* argv[]) {
+	helper = new Helper();
+    ioMan = new IOmanager(argc, argv, *helper);
+	mapGen = new mapGenerator(ioMan);
+	inputMan = new inputManager(helper, ioMan, mapGen);
 
-	IOmanager ioMan(argc, argv, helper);
+
     //ioMan.test();
 	
-    if (ioMan.writeFileFromExePath(logFile, "Log file created.\n", FileWriteMode::Overwrite)) {
+    if (ioMan->writeFileFromExePath(logFile, "Log file created.\n", FileWriteMode::Overwrite)) {
         std::cout << "Successfully created data/log.txt" << std::endl;
     }
-    if (ioMan.writeFileFromExePath(configFile, "setting=value\nversion=1.0", FileWriteMode::Overwrite)) {
+    if (ioMan->writeFileFromExePath(configFile, "setting=value\nversion=1.0", FileWriteMode::Overwrite)) {
         std::cout << "Successfully created data/config.ini" << std::endl;
     }
-    ioMan.readFileContent(configFile.string());
-    ioMan.readFileContent(logFile.string());
+    ioMan->readFileContent(configFile.string());
+    ioMan->readFileContent(logFile.string());
     if (argc < 2) {
         //std::cerr << "Usage: MyProgram <server|client>\n";
-		helper.logError("Not enough or no arguments provided.");
-		helper.logError("Usage: MyProgram <server|client>. Entering default mode.");
+		helper->logError("Not enough or no arguments provided.");
+		helper->logError("Usage: MyProgram <server|client>. Entering default mode.");
         //printPrompt(helper);
-        waitForInput(helper);
+        inputMan->waitForInput();
 		//foo_sync();
 		
         return 1;
@@ -70,15 +77,15 @@ int main(int argc, const char* argv[]) {
     std::string role_str = argv[1];
     Role role = UNKNOWN;
     if (role_str == "server") {
-        helper.logInfo("Starting server...");
+        helper->logInfo("Starting server...");
         role = SERVER;
     } 
     if (role_str == "client") {
-        helper.logInfo("Starting client...");
+        helper->logInfo("Starting client...");
         role = CLIENT;
     }
     if (role_str == "game") {
-        helper.logInfo("Starting game...");
+        helper->logInfo("Starting game...");
         /*Window window;
         if (window.init("My SDL3 Window", 800, 600)) {
             window.mainLoop();
@@ -90,16 +97,16 @@ int main(int argc, const char* argv[]) {
         asio::io_context io_context;
 
         if (role == SERVER) {
-            TcpServer server(io_context, helper);
+            TcpServer server(io_context, *helper);
             server.run();
         } else if (role == CLIENT) {
             // client.run();
             client(io_context);
         } else {
             // std::cerr << "Unknown role specified. Use 'server' or 'client'.\n";
-            helper.logError("Unknown role specified. Use 'server' or 'client'. Entering default mode.\n");
+            helper->logError("Unknown role specified. Use 'server' or 'client'. Entering default mode.\n");
             // 
-            waitForInput(helper);
+            inputMan->waitForInput();
 			//waitForInput(helper);
             return 1;
         }
@@ -117,7 +124,7 @@ bool client(asio::io_context& io_context){
 
     TcpClient client(io_context, SERVER_HOST, CLIENT_PORT);
     
-    client.waitForInput(helper);
+    client.waitForInput(*helper);
     client.run("hello server.\n");
 	
     return true;

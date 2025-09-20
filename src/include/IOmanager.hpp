@@ -39,6 +39,7 @@ class Helper;
 
 class IOmanager {
 public:
+    //IOmanager() = default;
     /**
      * IOmanager(int argc, char const *argv[])
      * Accepts the given arguments and checks if there are too many arguments,

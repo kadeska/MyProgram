@@ -12,11 +12,10 @@ private:
         bool info = true;
         bool debug = true;
         bool raw = true;
-	};
+	}logLevel;
 public:
     Helper(/* args */);
     ~Helper();
-    logLevels logLevel;
 
     void log(std::string logMsg);
     void logError(std::string logMsg);
