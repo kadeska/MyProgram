@@ -1,6 +1,6 @@
 #include "include/inputManager.hpp"
 // SDL3 window
-#include "include/window.hpp"
+//#include "include/window.hpp"
 
 bool waitLoop = false;
 bool modeSelection = false;
@@ -64,11 +64,11 @@ bool processInput(std::string& input, Helper& helper)
 
 	if (input == "game") { 
         helper.logInfo("Launching game..."); 
-        Window window;
+        /*Window window;
         if (window.init("My SDL3 Window", 800, 600)) {
             window.mainLoop();
             window.cleanup();
-        }
+        }*/
     }
 
     else {

@@ -12,7 +12,7 @@
 #include "include/inputManager.hpp"
 
 // SDL3 window
-#include "include/window.hpp"
+//#include "include/window.hpp"
 
 
 // #define ASIO_STANDALONE
@@ -79,11 +79,11 @@ int main(int argc, const char* argv[]) {
     }
     if (role_str == "game") {
         helper.logInfo("Starting game...");
-        Window window;
+        /*Window window;
         if (window.init("My SDL3 Window", 800, 600)) {
             window.mainLoop();
             window.cleanup();
-        }
+        }*/
     }
 
     try {

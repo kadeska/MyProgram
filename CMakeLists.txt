@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.24)
 project(MyProgram VERSION 1.0)
 
-# Add the SDL subdirectory and build it with your project.
+# Add the SDL subdirectories and build them with your project.
 add_subdirectory(external/SDL)
+# add_subdirectory(external/SDL_image)
+
 
 add_executable(MyProgram
     src/main.cpp
@@ -14,7 +16,7 @@ add_executable(MyProgram
     src/timer.cpp
     src/networkManager.cpp
     src/inputManager.cpp
-    src/window.cpp
+   # src/window.cpp
 )
 
 set_property(TARGET MyProgram PROPERTY CXX_STANDARD 23)
@@ -30,11 +32,12 @@ target_compile_definitions(MyProgram PRIVATE
     ASIO_STANDALONE
 )
 
-# Link your executable to the SDL3 library.
+# Link your executable to the SDL3 and SDL3_image libraries.
 target_link_libraries(MyProgram PRIVATE
     ws2_32
     mswsock
     SDL3::SDL3
+    # SDL3_image::SDL3_image  # Add the SDL3_image library
 )
 
 # Use the TARGET_FILE generator expression to get the path reliably.
@@ -44,4 +47,10 @@ if (WIN32)
             "$<TARGET_FILE:SDL3::SDL3>"
             "$<TARGET_FILE_DIR:MyProgram>"
     )
+    # Copy the SDL3_image DLL as well.
+   # add_custom_command(TARGET MyProgram POST_BUILD
+   #     COMMAND ${CMAKE_COMMAND} -E copy_if_different
+   #         "$<TARGET_FILE:SDL3_image::SDL3_image>"
+   #         "$<TARGET_FILE_DIR:MyProgram>"
+   # )
 endif()
