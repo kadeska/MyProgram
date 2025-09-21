@@ -60,6 +60,7 @@ bool inputManager::processInput(std::string& input)
         //helper->logInfo("Generating random map...");
         // Generate and display a random map (for demonstration purposes, we'll just print a message)
 		mapGen->generateMap(10, 10);
+        mapGen->printMap();
 		return true;
     }
     if (input == "server") { helper->logInfo("Launching server..."); }
