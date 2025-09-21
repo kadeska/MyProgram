@@ -1,3 +1,7 @@
+[prompt]: https://github.com/kadeska/MyProgram/blob/main/images/Screenshot-prompt.png "prompt"
+[map]: https://github.com/kadeska/MyProgram/blob/main/images/Screenshot-map.png "map"
+
+
 # MyProgram
 Some console app
 
@@ -12,4 +16,10 @@ Some console app
 
 ## Build and Run
 * Build with CMake
-* Run executable with or without arguments <server/client>. 
+* Run executable with or without arguments <server/client>.
+* * The program will prompt you with something like this
+![alt text][prompt]
+
+* enter 'map' command and the program will generate a 2D map using a cellular automata algorithm.
+* * (as of right now) the program will output something like this.
+![alt text][map]
