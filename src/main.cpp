@@ -117,7 +117,7 @@ static int processArgs(int argc, const char* argv[]) {
 int main(int argc, const char* argv[]) {
     // initialize
     if (init(argc, argv)) {
-        std::cerr << "Failed to initialize classes." << std::endl;
+        std::cerr << "Failed to initialize." << std::endl;
         return 1;
     }
 
