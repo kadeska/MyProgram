@@ -2,6 +2,7 @@
 #include "helper.hpp"
 #include "mapGenerator.hpp"
 #include "IOmanager.hpp"
+#include "client.hpp"
 #include "server.hpp"
 
 
@@ -65,8 +66,18 @@ bool inputManager::processInput(std::string& input)
         mapGen->printMap();
 		return true;
     }
-    if (input == "server") { helper->logInfo("Launching server...");}
-    if (input == "client") { helper->logInfo("Launching client"); }
+    if (input == "server") { 
+        helper->logInfo("Launching server...");
+        asio::io_context io_context;
+        TcpServer server(io_context, helper);
+        server.run();
+    }
+    if (input == "client") { 
+        helper->logInfo("Launching client");
+        asio::io_context io_context;
+        TcpClient client(io_context, SERVER_HOST, CLIENT_PORT);
+        client.run("hello server.\n");
+    }
 
 	if (input == "game") { 
         helper->logInfo("Launching game...");
