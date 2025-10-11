@@ -39,6 +39,7 @@ class Helper;
 
 class IOmanager {
 public:
+
     //IOmanager() = default;
     /**
      * IOmanager(int argc, char const *argv[])
@@ -68,6 +69,7 @@ public:
     command check();
 
     int test();
+	int printToLogFile(std::string logMsg);
     bool writeFileFromExePath(const std::filesystem::path& relativePath, const std::string& contents, FileWriteMode mode);
     std::filesystem::path getExecutableDirectory();
 
@@ -86,5 +88,7 @@ private:
     std::vector<givenArgument> givenArgs;
     
     Helper& helper;
+
+    
 };
 

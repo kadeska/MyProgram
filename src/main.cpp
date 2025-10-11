@@ -10,6 +10,7 @@
 
 #include "include/helper.hpp"
 #include "include/inputManager.hpp"
+#include "include/mapGenerator.hpp"
 
 // SDL3 window
 //#include "include/window.hpp"
@@ -23,63 +24,54 @@
 
 
 Helper* helper;
-IOmanager* ioMan;
-inputManager* inputMan;
-mapGenerator* mapGen;
-
-
-bool client(asio::io_context& io_context);
-
-const std::filesystem::path logFile = "data/log.txt";
-const std::filesystem::path configFile = "data/config.ini";
 
 enum Role { UNKNOWN, SERVER, CLIENT };
 
-//int main(int argc, char* argv[]) {
-//    // Your previous main() code here
-//    if(!SDL_Init(SDL_INIT_VIDEO)) {
-//        helper.logInfo("SDL initialized successfully.");
-//    } else {
-//        helper.logError(std::string("SDL initialization failed: ") + SDL_GetError());
-//        return 1;
-//	}
-//    return 0;
-//}
-
-int main(int argc, const char* argv[]) {
-	helper = new Helper();
-    ioMan = new IOmanager(argc, argv, *helper);
-	mapGen = new mapGenerator(ioMan, helper);
-	inputMan = new inputManager(helper, ioMan, mapGen);
 
 
-    //ioMan.test();
-	
-    if (ioMan->writeFileFromExePath(logFile, "Log file created.\n", FileWriteMode::Overwrite)) {
+static int init(int argc, const char* argv[]) {
+    // wrap with try catch or check for nullptr
+    helper = new Helper();
+    helper->ioMan = new IOmanager(argc, argv, *helper);
+    helper->mapGen = new mapGenerator(helper->ioMan, helper);
+    helper->inputMan = new inputManager(helper, helper->ioMan, helper->mapGen);
+
+    helper->logFile = "data/log.txt";
+	helper->serverLogFile = "data/server_log.txt";
+    helper->configFile = "data/config.ini";
+
+    if (helper->ioMan->writeFileFromExePath(helper->logFile, "Log file created.\n", FileWriteMode::Overwrite)) {
         std::cout << "Successfully created data/log.txt" << std::endl;
     }
-    if (ioMan->writeFileFromExePath(configFile, "setting=value\nversion=1.0", FileWriteMode::Overwrite)) {
+    if (helper->ioMan->writeFileFromExePath(helper->configFile, "setting=value\nversion=1.0", FileWriteMode::Overwrite)) {
         std::cout << "Successfully created data/config.ini" << std::endl;
     }
-    ioMan->readFileContent(configFile.string());
-    ioMan->readFileContent(logFile.string());
-    if (argc < 2) {
-        //std::cerr << "Usage: MyProgram <server|client>\n";
-		helper->logError("Not enough or no arguments provided.");
-		helper->logError("Usage: MyProgram <server|client>. Entering default mode.");
-        //printPrompt(helper);
-        inputMan->waitForInput();
-		//foo_sync();
-		
-        return 1;
-    }
+    helper->ioMan->readFileContent(helper->configFile.string());
+    helper->ioMan->readFileContent(helper->logFile.string());
+
+    return 0;
+}
+
+static bool client(asio::io_context& io_context) {
+    std::cout << "testing1" << std::endl;
+
+    TcpClient client(io_context, SERVER_HOST, CLIENT_PORT);
+
+    //client.waitForInput(*helper);
+    client.run("hello server.\n");
+
+    return true;
+}
+
+static int processArgs(int argc, const char* argv[]) {
+    // process args here
 
     std::string role_str = argv[1];
     Role role = UNKNOWN;
     if (role_str == "server") {
         helper->logInfo("Starting server...");
         role = SERVER;
-    } 
+    }
     if (role_str == "client") {
         helper->logInfo("Starting client...");
         role = CLIENT;
@@ -97,35 +89,53 @@ int main(int argc, const char* argv[]) {
         asio::io_context io_context;
 
         if (role == SERVER) {
-            TcpServer server(io_context, *helper);
+            TcpServer server(io_context, helper);
             server.run();
-        } else if (role == CLIENT) {
+        }
+        else if (role == CLIENT) {
             // client.run();
             client(io_context);
-        } else {
+        }
+        else {
             // std::cerr << "Unknown role specified. Use 'server' or 'client'.\n";
             helper->logError("Unknown role specified. Use 'server' or 'client'. Entering default mode.\n");
             // 
-            inputMan->waitForInput();
-			//waitForInput(helper);
+            helper->inputMan->waitForInput();
+            //waitForInput(helper);
             return 1;
         }
-    } catch (std::exception& e) {
+    }
+    catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
         // helper.logError("Exception: " + std::to_string(e.what()));
         return 1;
     }
-
     return 0;
 }
 
-bool client(asio::io_context& io_context){
-    std::cout << "testing1" << std::endl;
+// cleaned  up main function 
+int main(int argc, const char* argv[]) {
+    // initialize
+    if (init(argc, argv)) {
+        std::cerr << "Failed to initialize classes." << std::endl;
+        return 1;
+    }
 
-    TcpClient client(io_context, SERVER_HOST, CLIENT_PORT);
-    
-    client.waitForInput(*helper);
-    client.run("hello server.\n");
-	
-    return true;
+    // test function
+    //ioMan.test();
+
+    // if no arguments provided, enter default mode(standby for input)
+    if (argc < 2) {
+        //std::cerr << "Usage: MyProgram <server|client>\n";
+        helper->logError("Not enough or no arguments provided.");
+        helper->logError("Usage: MyProgram <server|client>. Entering default 'standby' mode.");
+        //printPrompt(helper);
+        helper->inputMan->waitForInput();
+        //foo_sync();
+
+        return 1;
+    }
+
+    processArgs(argc, argv);
+    return 0;
 }

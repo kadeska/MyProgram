@@ -3,25 +3,25 @@
 #include <iostream>
 #include <string>
 
-#include "helper.hpp"
-#include "mapGenerator.hpp"
-#include "IOmanager.hpp"
+// Forward declarations instead of includes
+class Helper;
+class IOmanager;
+class mapGenerator;
 
 class inputManager {
-	//mapGenerator mapGen;
 public:
-	void initInputManager(Helper* _helper, IOmanager* _ioManager, mapGenerator* _mapGen);
+    void initInputManager(Helper* _helper, IOmanager* _ioManager, mapGenerator* _mapGen);
 
-	int waitForInput();
+    int waitForInput();
 
-	bool update();
-	void stopWaiting();
-	bool isWaiting();
-	bool processInput(std::string& input);
-	int printPrompt();
-	void selectMode();
+    bool update();
+    void stopWaiting();
+    bool isWaiting();
+    bool processInput(std::string& input);
+    int printPrompt();
+    void selectMode();
 
-	Helper* helper;
-	IOmanager* ioManager;
-	mapGenerator* mapGen;
+    Helper* helper;
+    IOmanager* ioManager;
+    mapGenerator* mapGen;
 };

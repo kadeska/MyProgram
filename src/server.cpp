@@ -1,16 +1,17 @@
 #include "include/server.hpp"
-#include "server.hpp"
+#include "include/helper.hpp"
+#include "include/IOmanager.hpp"
 #include <random>
 using asio::ip::tcp;
 
-TcpServer::TcpServer(asio::io_context& io_context, Helper mHelper)
+TcpServer::TcpServer(asio::io_context& io_context, Helper* mHelper)
     : io_context_(io_context),
       acceptor_(io_context, tcp::endpoint(tcp::v4(), std::stoi(SERVER_PORT))) {helper = mHelper;}
 
 void TcpServer::run() {
     try {
         // std::cout << "Server is listening on port " << SERVER_PORT << std::endl;
-        helper.log("Server is listening on port " + SERVER_PORT);
+        helper->log("Server is listening on port " + SERVER_PORT);
         for (;;) {
             tcp::socket socket(io_context_);
             acceptor_.accept(socket);
@@ -56,11 +57,16 @@ void TcpServer::handle_client(tcp::socket& socket) {
         std::string client_message;
         std::getline(request_stream, client_message);
         std::cout << "Received message from client: " << client_message << std::endl;
+		helper->ioMan->printToLogFile("Received from client: " + client_message);
         // proccess message
 
         // Send a response back to the client
-        std::string response_message = generateRandInt(3); // "123,456,789\n";
+        std::string response_message = generateRandInt(seed); // "123,456,789\n";
+        // log to log file
+		helper->ioMan->printToLogFile("Sent to client: " + response_message);
+        // write to client
         asio::write(socket, asio::buffer(response_message), error);
+        
 
         if (error) {
             throw asio::system_error(error);

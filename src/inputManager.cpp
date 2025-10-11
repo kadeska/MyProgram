@@ -1,6 +1,8 @@
-#include "include/inputManager.hpp"
-// SDL3 window
-//#include "include/window.hpp"
+#include "inputManager.hpp"
+#include "helper.hpp"
+#include "mapGenerator.hpp"
+#include "IOmanager.hpp"
+#include "server.hpp"
 
 
 bool waitLoop = false;
@@ -63,7 +65,7 @@ bool inputManager::processInput(std::string& input)
         mapGen->printMap();
 		return true;
     }
-    if (input == "server") { helper->logInfo("Launching server..."); }
+    if (input == "server") { helper->logInfo("Launching server...");}
     if (input == "client") { helper->logInfo("Launching client"); }
 
 	if (input == "game") { 
@@ -79,6 +81,8 @@ bool inputManager::processInput(std::string& input)
         helper->logInfo("You entered: " + input);
         return true;
     }
+
+	return false;
 }
 
 int inputManager::printPrompt()

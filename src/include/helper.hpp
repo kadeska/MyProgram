@@ -1,18 +1,23 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include <filesystem>
+
+// Forward declarations
+class IOmanager;
+class inputManager;
+class mapGenerator;
 
 class Helper
 {
 private:
-    /* data */
     struct logLevels {
         bool error = true;
         bool warning = true;
         bool info = true;
         bool debug = true;
         bool raw = true;
-	}logLevel;
+    } logLevel;
 public:
     Helper(/* args */);
     ~Helper();
@@ -24,4 +29,12 @@ public:
     void logDebug(std::string logMsg);
     void logRaw(std::string logMsg, bool logLevel = true);
     void printArgs(int argc, const char *argv[]);
+
+    std::filesystem::path logFile;
+    std::filesystem::path serverLogFile;
+    std::filesystem::path configFile;
+
+    IOmanager* ioMan;
+    inputManager* inputMan;
+    mapGenerator* mapGen;
 };

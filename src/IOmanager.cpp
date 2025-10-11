@@ -112,6 +112,11 @@ bool IOmanager::writeFileFromExePath(const std::filesystem::path& relativePath, 
     }
 }
 
+int IOmanager::printToLogFile(std::string logMsg) {
+    writeFileFromExePath(helper.serverLogFile, logMsg + '\n', FileWriteMode::Append);
+    return 0;
+}
+
 int IOmanager::test() {
     const std::string filename = "data/log.txt";
 
