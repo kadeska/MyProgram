@@ -133,3 +133,8 @@ void Helper::printArgs(int argc, const char *argv[])
         log("Given arguments [" + std::to_string(i) +  "] : " + std::string(argv[i]));
     }
 }
+
+
+void Helper::logAsGenerator(std::string message) {
+    logDebug("[EntityGenerator] " + message);
+}

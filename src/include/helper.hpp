@@ -30,6 +30,8 @@ public:
     void logRaw(std::string logMsg, bool logLevel = true);
     void printArgs(int argc, const char *argv[]);
 
+    void logAsGenerator(std::string message);
+
     std::filesystem::path logFile;
     std::filesystem::path serverLogFile;
     std::filesystem::path configFile;

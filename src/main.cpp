@@ -11,6 +11,9 @@
 #include "include/helper.hpp"
 #include "include/inputManager.hpp"
 #include "include/mapGenerator.hpp"
+#include "include/entityGenerator.hpp"
+
+#include "include/player.hpp"
 
 // SDL3 window
 //#include "include/window.hpp"
@@ -123,6 +126,12 @@ int main(int argc, const char* argv[]) {
 
     // test function
     //ioMan.test();
+    //Player player = Player(0, "player", 100, 0, 0);
+    EntityGenerator entityGen(helper->ioMan, helper);
+    entityGen.generateEntity("test item", EntityTypes::ITEM);
+    entityGen.generateEntity("test item", EntityTypes::ITEM);
+    entityGen.generateEntity("test item", EntityTypes::ITEM);
+    entityGen.generateEntity("test item", EntityTypes::PLAYER);
 
     // if no arguments provided, enter default mode(standby for input)
     if (argc < 2) {
