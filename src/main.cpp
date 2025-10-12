@@ -39,6 +39,8 @@ static int init(int argc, const char* argv[]) {
     helper->ioMan = new IOmanager(argc, argv, *helper);
     helper->mapGen = new mapGenerator(helper->ioMan, helper);
     helper->inputMan = new inputManager(helper, helper->ioMan, helper->mapGen);
+    helper->entityMan = new EntityManager(helper);
+    helper->entityGen = new EntityGenerator(helper->ioMan, helper);
 
     helper->logFile = "data/log.txt";
 	helper->serverLogFile = "data/server_log.txt";
@@ -128,19 +130,19 @@ int main(int argc, const char* argv[]) {
     // test function
     //ioMan.test();
 
-    EntityGenerator entityGen(helper->ioMan, helper);
-	EntityManager entityMan(helper);
+    //EntityGenerator entityGen(helper->ioMan, helper);
+	//EntityManager entityMan(helper);
 
-    auto playerEntity = entityGen.generateEntity("Player 1", EntityTypes::PLAYER);
-    entityMan.addEntity(std::move(playerEntity));
+    auto playerEntity = helper->entityGen->generateEntity("Player 1", EntityTypes::PLAYER);
+    helper->entityMan->addEntity(std::move(playerEntity));
 
     // Refactored for loop to use unique_ptr correctly
     for (int i = 0; i < 5; i++) {
         // 1. Call generateEntity, which now returns a unique_ptr
-        auto enemyEntity = entityGen.generateEntity("enemy " + std::to_string(i), EntityTypes::ENEMY);
+        auto enemyEntity = helper->entityGen->generateEntity("enemy " + std::to_string(i), EntityTypes::ENEMY);
 
         // 2. Add the entity to the manager by moving its ownership
-        entityMan.addEntity(std::move(enemyEntity));
+        helper->entityMan->addEntity(std::move(enemyEntity));
     }
 
     // if no arguments provided, enter default mode(standby for input)

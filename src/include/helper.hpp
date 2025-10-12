@@ -7,6 +7,8 @@
 class IOmanager;
 class inputManager;
 class mapGenerator;
+class EntityManager;
+class EntityGenerator;
 
 class Helper
 {
@@ -39,4 +41,6 @@ public:
     IOmanager* ioMan;
     inputManager* inputMan;
     mapGenerator* mapGen;
+    EntityManager* entityMan;
+	EntityGenerator* entityGen;
 };
