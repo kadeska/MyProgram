@@ -78,6 +78,10 @@ bool inputManager::processInput(std::string& input)
         TcpClient client(io_context, SERVER_HOST, CLIENT_PORT);
         client.run("hello server.\n");
     }
+    if (input == "spawn-entity") {
+        helper->logInfo("Spawning entity not implemented yet.");
+		//entityMan->addEntity(entityGen->generateEntity("Player1", EntityTypes::PLAYER));
+    }
 
 	if (input == "game") { 
         helper->logInfo("Launching game...");
