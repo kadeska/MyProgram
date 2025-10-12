@@ -12,6 +12,7 @@
 #include "include/inputManager.hpp"
 #include "include/mapGenerator.hpp"
 #include "include/entityGenerator.hpp"
+#include "include/entityManager.hpp"
 
 #include "include/player.hpp"
 
@@ -126,12 +127,21 @@ int main(int argc, const char* argv[]) {
 
     // test function
     //ioMan.test();
-    //Player player = Player(0, "player", 100, 0, 0);
+
     EntityGenerator entityGen(helper->ioMan, helper);
-    entityGen.generateEntity("test item", EntityTypes::ITEM);
-    entityGen.generateEntity("test item", EntityTypes::ITEM);
-    entityGen.generateEntity("test item", EntityTypes::ITEM);
-    entityGen.generateEntity("test item", EntityTypes::PLAYER);
+	EntityManager entityMan(helper);
+
+    auto playerEntity = entityGen.generateEntity("Player 1", EntityTypes::PLAYER);
+    entityMan.addEntity(std::move(playerEntity));
+
+    // Refactored for loop to use unique_ptr correctly
+    for (int i = 0; i < 5; i++) {
+        // 1. Call generateEntity, which now returns a unique_ptr
+        auto enemyEntity = entityGen.generateEntity("enemy " + std::to_string(i), EntityTypes::ENEMY);
+
+        // 2. Add the entity to the manager by moving its ownership
+        entityMan.addEntity(std::move(enemyEntity));
+    }
 
     // if no arguments provided, enter default mode(standby for input)
     if (argc < 2) {

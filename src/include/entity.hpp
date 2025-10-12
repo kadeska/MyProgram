@@ -5,6 +5,7 @@
 #include <filesystem>
 #include "entityTypes.hpp"
 
+
 class Entity {
 public:
 	// A lightweight ID for the entity

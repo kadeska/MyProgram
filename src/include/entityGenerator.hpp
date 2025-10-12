@@ -18,5 +18,5 @@ private:
 public:
 	EntityGenerator(IOmanager* _ioManager, Helper* _helper);
 	~EntityGenerator();
-	Entity generateEntity(std::string _name, EntityTypes::Type _type);
+	std::unique_ptr<Entity> generateEntity(std::string _name, EntityTypes::Type _type);
 };

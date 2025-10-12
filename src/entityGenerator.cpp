@@ -14,18 +14,32 @@ EntityGenerator::~EntityGenerator()
 {
 }
 
-Entity EntityGenerator::generateEntity(std::string _name, EntityTypes::Type _type)
+std::unique_ptr<Entity> EntityGenerator::generateEntity(std::string _name, EntityTypes::Type _type)
 {
-	if (_type == EntityTypes::PLAYER) 
-	{
-		helper->logAsGenerator("Generating new player");
-		Player newPlayer(nextEntityID++, _type, _name, 100, 0, 0);
-	}
-	Entity newEntity(nextEntityID++, _name, _type);
-	helper->logAsGenerator("Generated entity: ID= " + std::to_string(newEntity.getID()) 
-		+ ", Name= '" + newEntity.getName() + "', Type= " + std::to_string(newEntity.getType()));
-	return newEntity;
+    // Use a unique_ptr to manage the new object's memory.
+    std::unique_ptr<Entity> newEntity;
 
+    if (_type == EntityTypes::PLAYER)
+    {
+        helper->logAsGenerator("Generating new player");
+        // Use std::make_unique to safely create a Player object on the heap
+        newEntity = std::make_unique<Player>(nextEntityID++, _type, _name, 100, 0, 0);
+    }
+    else if (_type == EntityTypes::ENEMY) // Assuming you have an ENEMY type
+    {
+        helper->logAsGenerator("Generating new enemy");
+        newEntity = std::make_unique<Entity>(nextEntityID++, _name, _type);
+    }
+    else
+    {
+        // Throw an exception for unsupported types
+        throw std::invalid_argument("Unsupported entity type.");
+    }
+
+    helper->logAsGenerator("Generated entity: ID= " + std::to_string(newEntity->getID())
+        + ", Name= '" + newEntity->getName() + "', Type= " + std::to_string(newEntity->getType()));
+
+    return newEntity; // Ownership is transferred to the caller
 }
 
 

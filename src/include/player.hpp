@@ -12,8 +12,8 @@ private:
 public:
 	Player(EntityID _id, Entity::EntityType _type, std::string _name, int _health, int _x, int _y)
 		: Entity(_id, _name, _type), health(_health), x(_x), y(_y) {
-		std::cout << "Player created: ID= " << getID() << ", Name= '" << _name 
-			<< "', Health= " << health << ", Position= (" << x << ", " << y << ")" << std::endl;
+		/*std::cout << "Player created: ID= " << getID() << ", Name= '" << _name 
+			<< "', Health= " << health << ", Position= (" << x << ", " << y << ")" << std::endl;*/
 	}
 	~Player() {}
 	EntityID getID() const { return Entity::getID(); }
