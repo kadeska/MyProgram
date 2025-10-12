@@ -42,6 +42,9 @@ static int init(int argc, const char* argv[]) {
     helper->entityMan = new EntityManager(helper);
     helper->entityGen = new EntityGenerator(helper->ioMan, helper);
 
+
+    // maybe move to a fileManager class later
+
     helper->logFile = "data/log.txt";
 	helper->serverLogFile = "data/server_log.txt";
     helper->configFile = "data/config.ini";
@@ -130,8 +133,6 @@ int main(int argc, const char* argv[]) {
     // test function
     //ioMan.test();
 
-    //EntityGenerator entityGen(helper->ioMan, helper);
-	//EntityManager entityMan(helper);
 
     auto playerEntity = helper->entityGen->generateEntity("Player 1", EntityTypes::PLAYER);
     helper->entityMan->addEntity(std::move(playerEntity));
