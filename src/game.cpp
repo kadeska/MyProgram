@@ -6,7 +6,7 @@ Game::Game(Helper* _helper, IOmanager* _ioMan, inputManager* _inputMan,
     level(1), isRunning(true), fixed_delta_time(1.0f / 60.0f), time_accumulator(0.0f),
     last_frame_time(std::chrono::high_resolution_clock::now()), max_updates_per_frame(5)
 {
-    helper->logAsGame("Inisializing game...");
+    helper->logAsGame("Initializing game...");
     helper->inGame = true;
     initConsoleBuffer(40, 25); // Set your desired console dimensions
     helper->mapGen->generateMap(bufferSize.X, bufferSize.Y);

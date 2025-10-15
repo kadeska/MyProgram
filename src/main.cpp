@@ -141,23 +141,23 @@ int main(int argc, const char* argv[]) {
     //ioMan.test();
 
 
-    auto playerEntity = helper->entityGen->generateEntity("Player 1", EntityTypes::PLAYER);
-    
-    helper->entityMan->addEntity(std::move(playerEntity));
+    //auto playerEntity = helper->entityGen->generateEntity("Player 1", EntityTypes::PLAYER);
+    //
+    //helper->entityMan->addEntity(std::move(playerEntity));
 
-    for (int i = 0; i < 5; i++) {
-        // 1. Call generateEntity, which returns a unique_ptr
-        auto enemyEntity = helper->entityGen->generateEntity("enemy " + std::to_string(i), EntityTypes::ENEMY);
-        // 2. Add the entity to the manager by moving its ownership
-        helper->entityMan->addEntity(std::move(enemyEntity));
-    }
+    //for (int i = 0; i < 5; i++) {
+    //    // 1. Call generateEntity, which returns a unique_ptr
+    //    auto enemyEntity = helper->entityGen->generateEntity("enemy " + std::to_string(i), EntityTypes::ENEMY);
+    //    // 2. Add the entity to the manager by moving its ownership
+    //    helper->entityMan->addEntity(std::move(enemyEntity));
+    //}
 
-    // make a new pointer from the get entity function after 
-    // adding entities to vector to avoid use-after-move error. 
-    if (auto* playerPtr = helper->entityMan->getEntityByID(0)) {
-        helper->entityMan->printEntity(playerPtr->getID());
-        helper->entityMan->saveEntity(playerPtr);
-    }
+    //// make a new pointer from the get entity function after 
+    //// adding entities to vector to avoid use-after-move error. 
+    //if (auto* playerPtr = helper->entityMan->getEntityByID(0)) {
+    //    helper->entityMan->printEntity(playerPtr->getID());
+    //    helper->entityMan->saveEntity(playerPtr);
+    //}
 
     // if no arguments provided, enter default mode(standby for input)
     if (argc < 2) {
