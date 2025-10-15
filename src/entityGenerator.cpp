@@ -43,5 +43,3 @@ std::unique_ptr<Entity> EntityGenerator::generateEntity(std::string _name, Entit
 
     return newEntity; // Ownership is transferred to the caller
 }
-
-

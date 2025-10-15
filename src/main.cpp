@@ -149,6 +149,7 @@ int main(int argc, const char* argv[]) {
     // adding entities to vector to avoid use-after-move error. 
     if (auto* playerPtr = helper->entityMan->getEntityByID(0)) {
         helper->entityMan->printEntity(playerPtr->getID());
+        helper->entityMan->saveEntity(playerPtr);
     }
 
     // if no arguments provided, enter default mode(standby for input)

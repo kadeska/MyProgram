@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "commands.hpp"
+#include "entity.hpp"
 
 
 
@@ -72,6 +73,8 @@ public:
 	int printToLogFile(std::string logMsg);
     bool writeFileFromExePath(const std::filesystem::path& relativePath, const std::string& contents, FileWriteMode mode);
     std::filesystem::path getExecutableDirectory();
+
+    void saveEntityToFile(std::unique_ptr<Entity> _entity);
 
 private:
     // std::vector<std::string> commandLineArgs;

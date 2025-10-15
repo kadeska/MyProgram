@@ -21,6 +21,11 @@ public:
 	int addEntity(std::unique_ptr<Entity> _entity);
 	int deleteEntityByID(Entity::EntityID _ID);
 	Entity* getEntityByID(Entity::EntityID _ID);
+
+	void saveEntity(Entity* _entity);
+
+
+
 	void printAllEntities();
 	void printEntity(Entity::EntityID _ID);
 

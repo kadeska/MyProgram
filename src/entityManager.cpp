@@ -44,6 +44,20 @@ Entity* EntityManager::getEntityByID(Entity::EntityID _ID)
 	return nullptr;
 }
 
+void EntityManager::saveEntity(Entity* _entity)
+{
+	//helper->logDebug("[EntityManager] saveEntity called.");
+	if (_entity) 
+	{
+		// Call IOmanager's save function
+		helper->ioMan->saveEntityToFile(std::make_unique<Entity>(*_entity));
+	}
+	else 
+	{
+		helper->logError("[EntityManager] Cannot save null entity.");
+	}
+}
+
 void EntityManager::printAllEntities()
 {
 	for (const auto& entity : entities) 
@@ -61,10 +75,12 @@ void EntityManager::printEntity(Entity::EntityID _ID)
 	{
 		if (entity->getID() == _ID) 
 		{
+			//saveEntity(entity);
 			// match found, print details
 			helper->logInfo("[EntityManager] Entity ID: " + std::to_string(entity->getID())
 				+ ", Name: '" + entity->getName()
 				+ "', Type: " + std::to_string(entity->getType()));
 		}
 	}
+	//saveEntity(getEntityByID(_ID));
 }

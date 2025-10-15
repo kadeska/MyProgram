@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <filesystem>
+#include "IOmanager.hpp"
 
 // Forward declarations
 class IOmanager;
