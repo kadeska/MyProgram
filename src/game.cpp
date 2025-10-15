@@ -35,6 +35,30 @@ void Game::update() {
     //    helper->mapGen->generateMap(bufferSize.X, bufferSize.Y);
     //    mapGenerationTimer = 0.0f; // Reset the timer
     //}
+
+
+    if (GetAsyncKeyState(VK_ESCAPE)) { // Check for Escape key
+		exit(0);
+    }
+    if (GetAsyncKeyState('W')) {
+        std::cout << "'W' key is pressed" << std::endl;
+        //move player
+    }
+    if (GetAsyncKeyState('A')) {
+        std::cout << "'A' key is pressed" << std::endl;
+    }
+    if (GetAsyncKeyState('S')) {
+        std::cout << "'S' key is pressed" << std::endl;
+    }
+    if (GetAsyncKeyState('D')) {
+        std::cout << "'D' key is pressed" << std::endl;
+    }
+    if (GetAsyncKeyState('E')) {
+        std::cout << "'E' key is pressed" << std::endl;
+    }
+    if (GetAsyncKeyState('F')) {
+        std::cout << "'F' key is pressed" << std::endl;
+    }
 }
 
 void Game::render() {

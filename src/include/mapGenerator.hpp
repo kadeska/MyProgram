@@ -20,8 +20,8 @@ private:
     const std::string mapFile = "data/map.txt";
     // seed increases chances of solid tile. Higher seed = more solid tiles.
     // e.g. seed = 1 means all tiles are solid, seed = 10 means 1 in 10 tiles are empty.
-    uint16_t seed = 3;
-    uint16_t lootChance = 50; // percentage
+    uint16_t seed = 2;
+    uint16_t lootChance = 10; // percentage
 
     // Store the map internally as a 2D array of chars
     std::vector<std::string> internalMap;
