@@ -139,5 +139,11 @@ void IOmanager::saveEntityToFile(std::unique_ptr<Entity> _entity)
 {
     helper.logDebug("[EntityManager] Saving entity to file. Entity name= '" + _entity->getName()
         + "', Entity type= " + std::to_string(_entity->getType()));
-    writeFileFromExePath("data/entitySave.txt", std::to_string(_entity->getID()), FileWriteMode::Append);
+    /*writeFileFromExePath("data/entitySave.txt", */
+	std::string path = "data/entity_" + std::to_string(_entity->getID()) + ".txt";
+    writeFileFromExePath(path,
+        "\nEntity ID: " + std::to_string(_entity->getID()) + '\n' 
+        + "Entity Name: " + _entity->getName() + '\n' 
+        + "Entity Type: " + std::to_string(_entity->getType()) + '\n',
+        FileWriteMode::Append);
 }
