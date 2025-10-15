@@ -43,3 +43,28 @@ Entity* EntityManager::getEntityByID(Entity::EntityID _ID)
 	}
 	return nullptr;
 }
+
+void EntityManager::printAllEntities()
+{
+	for (const auto& entity : entities) 
+	{
+		// for every entity, print details
+		helper->logInfo("[EntityManager] Entity ID: " + std::to_string(entity->getID())
+			+ ", Name: '" + entity->getName()
+			+ "', Type: " + std::to_string(entity->getType()));
+	}
+}
+
+void EntityManager::printEntity(Entity::EntityID _ID)
+{
+	for (const auto& entity : entities) 
+	{
+		if (entity->getID() == _ID) 
+		{
+			// match found, print details
+			helper->logInfo("[EntityManager] Entity ID: " + std::to_string(entity->getID())
+				+ ", Name: '" + entity->getName()
+				+ "', Type: " + std::to_string(entity->getType()));
+		}
+	}
+}

@@ -1,5 +1,6 @@
 #include "include/entityGenerator.hpp"
 #include "include/player.hpp"
+#include "include/hostileEntity.hpp"
 
 unsigned int nextEntityID = 0; // Global variable to keep track of the next entity ID
 
@@ -28,12 +29,13 @@ std::unique_ptr<Entity> EntityGenerator::generateEntity(std::string _name, Entit
     else if (_type == EntityTypes::ENEMY) // Assuming you have an ENEMY type
     {
         helper->logAsGenerator("Generating new enemy");
-        newEntity = std::make_unique<Entity>(nextEntityID++, _name, _type);
+        newEntity = std::make_unique<HostileEntity>(nextEntityID++, _type, _name, 100, 0, 0);
     }
     else
     {
         // Throw an exception for unsupported types
-        throw std::invalid_argument("Unsupported entity type.");
+        //throw std::invalid_argument("Unsupported entity type.");
+        helper->logError("Unsuported type: " + _type);
     }
 
     helper->logAsGenerator("Generated entity: ID= " + std::to_string(newEntity->getID())
