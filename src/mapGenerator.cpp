@@ -47,20 +47,20 @@ void mapGenerator::generateMap(int width, int height)
     // Iterate through each cell of the map to randomly assign tiles.
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
-            // Randomly choose between an 'empty' tile ('.') and a 'solid' tile ('#').
-            // The 'seed' variable controls the probability of a tile being solid.
-            //char tile = (rand() % seed == 0) ? getTileType().empty : getTileType().solid;
-            
-
-            char tile = (dist(gen) == 0) ? getTileType().empty : getTileType().solid;
-			// Introduce loot tiles ('L') based on the lootChance percentage.
-            if (tile == getTileType().empty) {
-                std::uniform_int_distribution<> lootDist(1, 100);
-                if (lootDist(gen) <= lootChance) {
-                    tile = getTileType().loot;
+            char tile;
+            // If we're at the border, set to solid
+            if (y == 0 || y == height - 1 || x == 0 || x == width - 1) {
+                tile = getTileType().solid;
+            } else {
+                tile = (dist(gen) == 1) ? getTileType().empty : getTileType().solid;
+                // Introduce loot tiles ('L') based on the lootChance percentage.
+                if (tile == getTileType().empty) {
+                    std::uniform_int_distribution<> lootDist(1, 100);
+                    if (lootDist(gen) <= lootChance) {
+                        tile = getTileType().loot;
+                    }
                 }
-			}
-
+            }
             tempMap += tile;
         }
         tempMap += '\n'; // Add newline to tempMap for correct indexing later.
@@ -97,15 +97,25 @@ void mapGenerator::generateMap(int width, int height)
             size_t currentIndex = y * (width + 1) + x;
 
             // Apply the smoothing rule: if 5 or more neighbors are solid, the tile becomes solid.
-            if (solidNeighbors >= 4) {
-                newMap[currentIndex] = getTileType().empty;
+
+			// Keep borders solid
+            
+            {
+                if (solidNeighbors >= 4) {
+                    newMap[currentIndex] = getTileType().empty;
+                }
+                else if (solidNeighbors >= 1) {
+                    newMap[currentIndex] = getTileType().loot;
+                }
+                else {
+                    newMap[currentIndex] = getTileType().solid;
+                }
             }
-            else if (solidNeighbors >= 5) {
-                newMap[currentIndex] = getTileType().loot;
-            }
-            else {
+            if (y == 0 || x == 0 ) {
                 newMap[currentIndex] = getTileType().solid;
             }
+
+            
         }
     }
 
@@ -117,9 +127,9 @@ void mapGenerator::generateMap(int width, int height)
     helper->logInfo("STEP #03 : Generating Loot");
     helper->logInfo("STEP #04 : Spawning Player");
 
-    // Set player start position to top-left corner (0,0) for now.
+    // Set player start position to close to center for now.
 	// -------------------------------------------
-    newMap[0] = getTileType().player;
+    newMap[511] = getTileType().player;
 
     // --- Final step: Format the final map data and store ---
     internalMap.resize(height);

@@ -131,11 +131,11 @@ int main(int argc, const char* argv[]) {
         std::cerr << "Failed to initialize." << std::endl;
         return 1;
     }
-    /*if (argc == 1) {
+    if (argc == 1) {
         std::cout << "No arguments provided. Entering game mode." << std::endl;
         Game* game = new Game(helper, helper->ioMan, helper->inputMan, helper->entityMan, helper->entityGen);
         game->run();
-    }*/
+    }
 
     // test function
     //ioMan.test();
