@@ -17,7 +17,7 @@ add_executable(MyProgram
     src/networkManager.cpp
     src/inputManager.cpp
    # src/window.cpp
- "src/mapGenerator.cpp" "src/entityGenerator.cpp" "src/entityManager.cpp")
+ "src/mapGenerator.cpp" "src/entityGenerator.cpp" "src/entityManager.cpp" "src/game.cpp")
 
 set_property(TARGET MyProgram PROPERTY CXX_STANDARD 23)
 set_property(TARGET MyProgram PROPERTY CXX_STANDARD_REQUIRED ON)

@@ -1,9 +1,12 @@
 #include "inputManager.hpp"
 #include "helper.hpp"
-#include "mapGenerator.hpp"
+
 #include "IOmanager.hpp"
 #include "client.hpp"
 #include "server.hpp"
+
+#include "game.hpp"
+#include "mapGenerator.hpp"
 
 
 bool waitLoop = false;
@@ -63,7 +66,7 @@ bool inputManager::processInput(std::string& input)
         //helper->logInfo("Generating random map...");
         // Generate and display a random map (for demonstration purposes, we'll just print a message)
 		mapGen->generateMap(10, 10);
-        mapGen->printMap();
+        //mapGen->printMap();
 		return true;
     }
     if (input == "server") { 
@@ -90,6 +93,8 @@ bool inputManager::processInput(std::string& input)
             window.mainLoop();
             window.cleanup();
         }*/
+		Game* game = new Game(helper, ioManager, this, helper->entityMan, helper->entityGen);
+        game->run();
     }
 
     else {

@@ -117,10 +117,13 @@ void Helper::logDebug(std::string logMsg)
 void Helper::logRaw(std::string logMsg, bool logLevel)
 {
     if (logLevel) {
-        std::cout << logMsg;
+        if (!inGame) 
+        {
+            std::cout << logMsg;
+        }
         return;
     }
-    std::cout << "skip \n";
+    //std::cout << "skip \n";
     
 }
 
@@ -137,4 +140,9 @@ void Helper::printArgs(int argc, const char *argv[])
 
 void Helper::logAsGenerator(std::string message) {
     logDebug("[EntityGenerator] " + message);
+}
+
+void Helper::logAsGame(std::string message) 
+{
+	logDebug("[Game] " + message);
 }

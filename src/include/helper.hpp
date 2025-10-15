@@ -3,6 +3,7 @@
 #include <iostream>
 #include <filesystem>
 #include "IOmanager.hpp"
+#include "mapGenerator.hpp"
 
 // Forward declarations
 class IOmanager;
@@ -25,6 +26,8 @@ public:
     Helper(/* args */);
     ~Helper();
 
+    bool inGame = false;
+
     void log(std::string logMsg);
     void logError(std::string logMsg);
     void logWarning(std::string logMsg);
@@ -34,6 +37,7 @@ public:
     void printArgs(int argc, const char *argv[]);
 
     void logAsGenerator(std::string message);
+    void logAsGame(std::string message);
 
     std::filesystem::path logFile;
     std::filesystem::path serverLogFile;
