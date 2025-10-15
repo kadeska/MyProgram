@@ -28,13 +28,13 @@ void Game::update() {
     // e.g., entityMan->update(fixed_delta_time);
 
     // For testing, generate a new map every few seconds
-    static float mapGenerationTimer = 0.0f;
-    mapGenerationTimer += fixed_delta_time;
-    if (mapGenerationTimer >= 0.50f) { // Generate a new map every 2 seconds
-        helper->logAsGame("Generating a new map...");
-        helper->mapGen->generateMap(bufferSize.X, bufferSize.Y);
-        mapGenerationTimer = 0.0f; // Reset the timer
-    }
+    //static float mapGenerationTimer = 0.0f;
+    //mapGenerationTimer += fixed_delta_time;
+    //if (mapGenerationTimer >= 0.50f) { // Generate a new map every 2 seconds
+    //    helper->logAsGame("Generating a new map...");
+    //    helper->mapGen->generateMap(bufferSize.X, bufferSize.Y);
+    //    mapGenerationTimer = 0.0f; // Reset the timer
+    //}
 }
 
 void Game::render() {

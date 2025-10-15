@@ -88,15 +88,23 @@ void mapGenerator::generateMap(int width, int height)
         }
     }
 
-    // --- STEP #03: Format the final map data and store ---
-    internalMap.resize(height);
-    for (int y = 0; y < height; ++y) {
-        internalMap[y] = newMap.substr(y * (width + 1), width);
-    }
+	
+
+    
 
     // --- Placeholder for remaining steps ---
     helper->logInfo("STEP #03 : Generating Loot");
     helper->logInfo("STEP #04 : Spawning Player");
+
+    // Set player start position to top-left corner (0,0) for now.
+	// -------------------------------------------
+    newMap[0] = getTileType().player;
+
+    // --- Final step: Format the final map data and store ---
+    internalMap.resize(height);
+    for (int y = 0; y < height; ++y) {
+        internalMap[y] = newMap.substr(y * (width + 1), width);
+    }
 }
 
 void mapGenerator::renderMapToBuffer(std::vector<CHAR_INFO>& buffer, int bufferWidth, int bufferHeight)
