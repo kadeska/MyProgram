@@ -3,6 +3,7 @@
 #include <string>
 #include <filesystem>
 #include <vector>
+#include <random>
 
 
 #include "IOmanager.hpp"
@@ -58,4 +59,10 @@ public:
 
     // Returns the tileType struct containing the tile characters.
     _tileType getTileType() { return tileType; }
+
+
+    // Create a random device and generator (ideally, these should be class members for efficiency)
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(0, seed - 1);
 };

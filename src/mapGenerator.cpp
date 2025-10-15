@@ -3,6 +3,8 @@
 //#define WIN32_LEAN_AND_MEAN
 //#include <windows.h> // For CHAR_INFO struct
 
+
+
 mapGenerator::mapGenerator(IOmanager* _ioManager, Helper* _helper)
     : ioMan(_ioManager), helper(_helper)
 {
@@ -25,6 +27,11 @@ mapGenerator::~mapGenerator()
  */
 void mapGenerator::generateMap(int width, int height)
 {
+    // Create a random device and generator (ideally, these should be class members for efficiency)
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(0, seed - 1);
+
     // Clear any previously generated map data before starting a new one.
     internalMap.clear();
 
@@ -42,7 +49,18 @@ void mapGenerator::generateMap(int width, int height)
         for (int x = 0; x < width; ++x) {
             // Randomly choose between an 'empty' tile ('.') and a 'solid' tile ('#').
             // The 'seed' variable controls the probability of a tile being solid.
-            char tile = (rand() % seed == 0) ? getTileType().empty : getTileType().solid;
+            //char tile = (rand() % seed == 0) ? getTileType().empty : getTileType().solid;
+            
+
+            char tile = (dist(gen) == 0) ? getTileType().empty : getTileType().solid;
+			// Introduce loot tiles ('L') based on the lootChance percentage.
+            if (tile == getTileType().empty) {
+                std::uniform_int_distribution<> lootDist(1, 100);
+                if (lootDist(gen) <= lootChance) {
+                    tile = getTileType().loot;
+                }
+			}
+
             tempMap += tile;
         }
         tempMap += '\n'; // Add newline to tempMap for correct indexing later.
@@ -79,11 +97,14 @@ void mapGenerator::generateMap(int width, int height)
             size_t currentIndex = y * (width + 1) + x;
 
             // Apply the smoothing rule: if 5 or more neighbors are solid, the tile becomes solid.
-            if (solidNeighbors >= 5) {
-                newMap[currentIndex] = getTileType().solid;
+            if (solidNeighbors >= 4) {
+                newMap[currentIndex] = getTileType().empty;
+            }
+            else if (solidNeighbors >= 5) {
+                newMap[currentIndex] = getTileType().loot;
             }
             else {
-                newMap[currentIndex] = getTileType().empty;
+                newMap[currentIndex] = getTileType().solid;
             }
         }
     }

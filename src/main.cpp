@@ -13,6 +13,7 @@
 #include "include/mapGenerator.hpp"
 #include "include/entityGenerator.hpp"
 #include "include/entityManager.hpp"
+#include "include/game.hpp"
 
 #include "include/player.hpp"
 
@@ -124,11 +125,17 @@ static int processArgs(int argc, const char* argv[]) {
 
 // cleaned  up main function 
 int main(int argc, const char* argv[]) {
+    
     // initialize
     if (init(argc, argv)) {
         std::cerr << "Failed to initialize." << std::endl;
         return 1;
     }
+    /*if (argc == 1) {
+        std::cout << "No arguments provided. Entering game mode." << std::endl;
+        Game* game = new Game(helper, helper->ioMan, helper->inputMan, helper->entityMan, helper->entityGen);
+        game->run();
+    }*/
 
     // test function
     //ioMan.test();
