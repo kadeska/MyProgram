@@ -1,5 +1,8 @@
-[prompt]: https://github.com/kadeska/MyProgram/blob/main/images/Screenshot-prompt.png "prompt"
-[map]: https://github.com/kadeska/MyProgram/blob/main/images/Screenshot-map.png "map"
+[game]: https://github.com/kadeska/MyProgram/blob/main/images/DefaultRunNoArgs.png "game"
+[default]: https://github.com/kadeska/MyProgram/blob/main/images/defaultArgument.png "default"
+[server]: https://github.com/kadeska/MyProgram/blob/main/images/server.png "server"
+[client]: https://github.com/kadeska/MyProgram/blob/main/images/client.png "client"
+
 
 
 # MyProgram
@@ -17,9 +20,18 @@ Some console app
 ## Build and Run
 * Build with CMake
 * Run executable with or without arguments <server/client>.
-* * The program will prompt you with something like this
-![alt text][prompt]
+* * Executing the program without cmd arguments will bring you straight into the game. The following screen shot shows the current state of the game. A 2d map is generated with player and loot.
+  ![alt text][game]
+
+* Run the program in a cmd prompt with cmd argument 'default' will prompt you with something like this
+  ![alt text][default]
+
+* Run the program in a cmd prompt with cmd argument 'server' will prompt you with something like this
+  ![alt text][server]
+
+* Run the program in a cmd prompt with cmd argument 'client' will prompt you with something like this
+  ![alt text][client]
 
 * enter 'map' command and the program will generate a 2D map using a cellular automata algorithm.
-* * (as of right now) the program will output something like this.
-![alt text][map]
+* * (as of right now) this has been moved to be used in the game generation. Later I will add a map generation system for making custom maps.
+
