@@ -16,12 +16,15 @@ Some console app
 * Generate characters
 * Launch game
 
+## Dependencies 
+* sudo apt-get install libncurses5-dev libncursesw5-dev
 
 ## Build and Run
 * Build with CMake
 * * In the root dir configure Cmake using "cmake -S . -B build/release"
 * * Then use "cmake --build build/release --config Release" to build
 * * Run using "./MyProgram" or "./MyProgram <server/client/default>"
+  * For linux, after building run this command in the root dir "./build/bin/Release/MyProgram <server/client/default>"
 
 
 ## Screenshots
