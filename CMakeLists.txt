@@ -3,28 +3,23 @@ project(MyProgram VERSION 0.1.0)
 
 # If building on Windows with MinGW (GNU), prefer building static libraries.
 if(WIN32 AND CMAKE_C_COMPILER_ID STREQUAL "GNU")
-  message(STATUS "MinGW detected on Windows: forcing static libraries (BUILD_SHARED_LIBS=OFF)")
-  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
+    message(STATUS "MinGW detected on Windows: forcing static libraries (BUILD_SHARED_LIBS=OFF)")
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
 endif()
 
-#if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
-#  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." )
-#endif()
-
+# Set output directories for binaries and libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 foreach(OUTPUTCONFIG IN ITEMS Debug Release RelWithDebInfo MinSizeRel)
-  string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG_UP)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UP} ${CMAKE_BINARY_DIR}/bin/${OUTPUTCONFIG})
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UP} ${CMAKE_BINARY_DIR}/lib/${OUTPUTCONFIG})
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UP} ${CMAKE_BINARY_DIR}/bin/${OUTPUTCONFIG})
+    string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG_UP)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UP} ${CMAKE_BINARY_DIR}/bin/${OUTPUTCONFIG})
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UP} ${CMAKE_BINARY_DIR}/lib/${OUTPUTCONFIG})
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UP} ${CMAKE_BINARY_DIR}/bin/${OUTPUTCONFIG})
 endforeach()
 
-# Removed SDL subdirectory since SDL is not required.
-# add_subdirectory(external/SDL)
-
+# Add executable
 add_executable(MyProgram
     src/main.cpp
     src/helper.cpp
@@ -35,7 +30,6 @@ add_executable(MyProgram
     src/timer.cpp
     src/networkManager.cpp
     src/inputManager.cpp
-    # src/window.cpp    # keep commented or remove the file if it only contains SDL code
     src/mapGenerator.cpp
     src/entityGenerator.cpp
     src/entityManager.cpp
@@ -88,10 +82,10 @@ endif()
 
 option(ENABLE_LTO "Enable link time optimization where supported" ON)
 if(ENABLE_LTO)
-  message(STATUS "Link-time optimization enabled where supported")
+    message(STATUS "Link-time optimization enabled where supported")
 endif()
 
-
+# Print status messages for debugging
 message(STATUS "CMake version: ${CMAKE_VERSION}")
 message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
