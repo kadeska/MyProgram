@@ -16,6 +16,8 @@ Some console app
 * Generate characters
 * Launch game
 
+## Dependencies 
+* sudo apt-get install libncurses5-dev libncursesw5-dev
 
 ## Build and Run
 * Build with CMake
