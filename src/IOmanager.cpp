@@ -7,8 +7,17 @@
 #include <filesystem>
 #include <stdexcept>
 
+
+#ifdef _WIN32
 // Include the Windows API header file for GetModuleFileNameA and MAX_PATH.
 #include <windows.h>
+#else
+// linux specific includes
+#include <unistd.h>  // Required for readlink
+#include <stdio.h>   // Required for printf (or any other IO)
+#include <string.h>  // Required for strlen
+#endif
+
 
 // #include "include/commands.hpp"
 
@@ -60,18 +69,20 @@ std::filesystem::path IOmanager::getExecutableDirectory() {
         throw std::runtime_error("Could not get executable path.");
     }
     std::filesystem::path p(buffer);
+    return p.parent_path();
 #else
-    char buffer; // Using a fixed-size buffer
+    char* buffer; // Using a fixed-size buffer
     ssize_t len = readlink("/proc/self/exe", buffer, sizeof(buffer) - 1);
     if (len != -1) {
         buffer[len] = '\0';
         std::filesystem::path p(buffer);
+		return p.parent_path();
     }
     else {
         throw std::runtime_error("Could not get executable path.");
     }
 #endif
-    return p.parent_path();
+    //return p.parent_path();
 }
 
 /**

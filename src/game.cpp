@@ -9,7 +9,18 @@ Game::Game(Helper* _helper, IOmanager* _ioMan, inputManager* _inputMan,
     helper->logAsGame("Initializing game...");
     helper->inGame = true;
     initConsoleBuffer(40, 25); // Set your desired console dimensions
+
+#ifdef _WIN32
+    //windows
     helper->mapGen->generateMap(bufferSize.X, bufferSize.Y);
+
+#else
+    // linux
+	helper->mapGen->generateMap(bufferWidth, bufferHeight);
+
+#endif
+
+    
 }
 
 Game::~Game()
@@ -17,10 +28,28 @@ Game::~Game()
 }
 
 void Game::initConsoleBuffer(int width, int height) {
+#ifdef _WIN32
+    // Windows Initialization
     bufferSize = { (short)width, (short)height };
     writeRegion = { 0, 0, (short)(width - 1), (short)(height - 1) };
     backBuffer.resize(width * height);
     hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+#else
+    // Linux Initialization
+    bufferWidth = width;
+    bufferHeight = height;
+    backBuffer.resize(bufferWidth * bufferHeight, ' ');
+
+    // Set up terminal (optional: make it more interactive)
+    std::cout << "\033[2J\033[H";  // Clear screen and move cursor to home position
+
+    initscr();              // Initialize ncurses mode
+    cbreak();               // Disable line buffering
+    noecho();               // Don't echo pressed keys
+    keypad(stdscr, TRUE);   // Enable function keys and arrow keys
+    nodelay(stdscr, TRUE);  // Make getch non-blocking
+
+#endif
 }
 
 void Game::update() {
@@ -37,8 +66,10 @@ void Game::update() {
     //}
 
 
+
+#ifdef _WIN32
     if (GetAsyncKeyState(VK_ESCAPE)) { // Check for Escape key
-		exit(0);
+        exit(0);
     }
     if (GetAsyncKeyState('W')) {
         std::cout << "'W' key is pressed" << std::endl;
@@ -59,14 +90,60 @@ void Game::update() {
     if (GetAsyncKeyState('F')) {
         std::cout << "'F' key is pressed" << std::endl;
     }
+#else
+
+    int ch = getch();  // Get the pressed key
+
+    if (ch == 27) { // Escape key (ASCII 27)
+        endwin();   // End ncurses mode
+        exit(0);
+    }
+    switch (ch) {
+    case 'w':
+    case 'W':
+        std::cout << "'W' key is pressed" << std::endl;
+        // Move player
+        break;
+    case 'a':
+    case 'A':
+        std::cout << "'A' key is pressed" << std::endl;
+        break;
+    case 's':
+    case 'S':
+        std::cout << "'S' key is pressed" << std::endl;
+        break;
+    case 'd':
+    case 'D':
+        std::cout << "'D' key is pressed" << std::endl;
+        break;
+    case 'e':
+    case 'E':
+        std::cout << "'E' key is pressed" << std::endl;
+        break;
+    case 'f':
+    case 'F':
+        std::cout << "'F' key is pressed" << std::endl;
+        break;
+    default:
+        break;  // Do nothing if no recognized key is pressed
+    }
+#endif
+
+
+   
+
+
+
+
 }
 
 void Game::render() {
-    
+#ifdef _WIN32
+    // Windows-specific rendering
     // 1. Clear the back buffer by filling with empty spaces
     for (size_t i = 0; i < backBuffer.size(); ++i) {
         backBuffer[i].Char.AsciiChar = ' ';
-        backBuffer[i].Attributes = FOREGROUND_GREEN;
+        backBuffer[i].Attributes = FOREGROUND_GREEN; // Set default character color
     }
 
     // 2. Render the map to the back buffer
@@ -74,7 +151,24 @@ void Game::render() {
 
     // 3. Write the completed back buffer to the console in one operation
     WriteConsoleOutput(hConsoleOutput, backBuffer.data(), bufferSize, { 0, 0 }, &writeRegion);
-    /*clear();*/
+#else
+    // Linux-specific rendering using ncurses
+    // 1. Clear the back buffer by filling with empty spaces
+    std::fill(backBuffer.begin(), backBuffer.end(), ' '); // Fill with spaces
+
+    // 2. Render the map to the back buffer
+    helper->mapGen->renderMapToBuffer(backBuffer, bufferWidth, bufferHeight);
+
+    // 3. Write the completed back buffer to the console in one operation
+    for (int y = 0; y < bufferHeight; ++y) {
+        for (int x = 0; x < bufferWidth; ++x) {
+            mvaddch(y, x, backBuffer[y * bufferWidth + x]); // Move to (x,y) and add character
+        }
+    }
+
+    // 4. Refresh the screen to display the new content
+    refresh();
+#endif
 }
 
 void Game::run()

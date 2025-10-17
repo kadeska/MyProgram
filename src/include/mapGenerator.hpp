@@ -9,8 +9,15 @@
 #include "IOmanager.hpp"
 #include "helper.hpp"
 
+
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h> // For CHAR_INFO struct
+#else
+// linux specific includes
+#endif
+
+
 
 
 class mapGenerator {
@@ -55,7 +62,15 @@ public:
      */
     void generateMap(int width, int height);
     // Modified `printMap` to use a `CHAR_INFO` buffer
+
+#ifdef _WIN32
     void renderMapToBuffer(std::vector<CHAR_INFO>& buffer, int bufferWidth, int bufferHeight);
+#else
+// linux specific function
+	void renderMapToBuffer(std::vector<char>& buffer, int bufferWidth, int bufferHeight);
+#endif
+
+    
 
     // Returns the tileType struct containing the tile characters.
     _tileType getTileType() { return tileType; }

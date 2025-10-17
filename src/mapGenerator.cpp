@@ -92,6 +92,9 @@ void mapGenerator::generateMap(int width, int height) {
     internalMap[playerSpawnY][playerSpawnX] = getTileType().player;
 }
 
+
+#ifdef _WIN32
+// Windows
 /**
  * @brief Renders the map to a buffer for display.
  *
@@ -117,3 +120,30 @@ void mapGenerator::renderMapToBuffer(std::vector<CHAR_INFO>& buffer, int bufferW
         }
     }
 }
+#else
+// linux
+/**
+ * @brief Renders the map to a buffer for display.
+ *
+ * @param buffer The character buffer to render to.
+ * @param bufferWidth The width of the buffer.
+ * @param bufferHeight The height of the buffer.
+ */
+void mapGenerator::renderMapToBuffer(std::vector<char>& buffer, int bufferWidth, int bufferHeight) {
+    int mapHeight = internalMap.size();
+    int mapWidth = internalMap.empty() ? 0 : internalMap[0].length();
+    for (int y = 0; y < bufferHeight; ++y) {
+        for (int x = 0; x < bufferWidth; ++x) {
+            if (y < mapHeight && x < mapWidth) {
+                buffer[y * bufferWidth + x] = internalMap[y][x];
+            }
+            else {
+                buffer[y * bufferWidth + x] = ' ';
+            }
+        }
+    }
+}
+#endif
+
+
+

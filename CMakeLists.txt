@@ -1,12 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 project(MyProgram VERSION 0.1.1)
 
-# If building on Windows with MinGW (GNU), prefer building static libraries.
-if(WIN32 AND CMAKE_C_COMPILER_ID STREQUAL "GNU")
-    message(STATUS "MinGW detected on Windows: forcing static libraries (BUILD_SHARED_LIBS=OFF)")
-    set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
-endif()
-
 # Set output directories for binaries and libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -42,32 +36,51 @@ set_property(TARGET MyProgram PROPERTY CXX_STANDARD_REQUIRED ON)
 target_include_directories(MyProgram PRIVATE
     src/include
     external/asio
-)       
-
-target_compile_definitions(MyProgram PRIVATE
-    _WIN32_WINNT=0x0A00
-    ASIO_STANDALONE
-    $<$<CONFIG:Release>:NDEBUG>
-    $<$<CONFIG:Debug>:_DEBUG>
 )
 
-target_compile_options(MyProgram PRIVATE
-    $<$<AND:$<CONFIG:Release>,$<CXX_COMPILER_ID:MSVC>>:/O2 /GL>
-    $<$<AND:$<CONFIG:Release>,$<NOT:$<CXX_COMPILER_ID:MSVC>>>:-O3 -flto>
-    $<$<AND:$<CONFIG:RelWithDebInfo>,$<CXX_COMPILER_ID:MSVC>>:/O2 /Zi>
-    $<$<AND:$<CONFIG:RelWithDebInfo>,$<NOT:$<CXX_COMPILER_ID:MSVC>>>:-O2 -g>
-)
+# Conditional compilation definitions and options
+if(WIN32)
+    # Windows-specific definitions and options
+    target_compile_definitions(MyProgram PRIVATE
+        _WIN32_WINNT=0x0A00  # Windows 10
+        ASIO_STANDALONE
+        $<$<CONFIG:Release>:NDEBUG>
+        $<$<CONFIG:Debug>:_DEBUG>
+    )
 
-target_link_options(MyProgram PRIVATE
-    $<$<AND:$<CONFIG:Release>,$<CXX_COMPILER_ID:MSVC>>:/LTCG>
-    $<$<AND:$<CONFIG:Release>,$<NOT:$<CXX_COMPILER_ID:MSVC>>>:-flto>
-)
+    target_compile_options(MyProgram PRIVATE
+        $<$<CONFIG:Release>:/O2>
+        $<$<CONFIG:RelWithDebInfo>:/O2 /Zi>
+    )
 
-# Link libraries (removed SDL)
-target_link_libraries(MyProgram PRIVATE
-    ws2_32
-    mswsock
-)
+    target_link_libraries(MyProgram PRIVATE
+        ws2_32
+        mswsock
+    )
+    
+elseif(UNIX)
+    # Linux-specific definitions and options
+
+    # find Cureses library
+    find_package(Curses REQUIRED)
+
+    target_compile_definitions(MyProgram PRIVATE
+        ASIO_STANDALONE
+        $<$<CONFIG:Release>:NDEBUG>
+        $<$<CONFIG:Debug>:_DEBUG>
+    )
+
+    target_compile_options(MyProgram PRIVATE
+        $<$<CONFIG:Release>:-O3>
+        $<$<CONFIG:RelWithDebInfo>:-O2 -g>
+    )
+
+    target_link_libraries(MyProgram PRIVATE
+        pthread
+        # Add any other necessary libraries here
+        ${CURSES_LIBRARIES}
+    )
+endif()
 
 # Copy runtime data folder only if the source exists to avoid failing the build.
 if (EXISTS "${CMAKE_SOURCE_DIR}/data" AND IS_DIRECTORY "${CMAKE_SOURCE_DIR}/data")

@@ -4,13 +4,21 @@
 #include <chrono>
 #include <thread>
 #include <vector>
+
+#ifdef _WIN32
 #include <windows.h> // Include for Win32 API functions
+#else
+// linux specific includes
+#include <ncurses.h>  // Include ncurses library
+#endif
+
+
 
 // Include all your other necessary header files here
 #include "IOmanager.hpp"
 #include "inputManager.hpp"
-#include "EntityManager.hpp"
-#include "EntityGenerator.hpp"
+#include "entityManager.hpp"
+#include "entityGenerator.hpp"
 #include "helper.hpp"
 #include "mapGenerator.hpp"
 
@@ -32,11 +40,22 @@ private:
     std::chrono::high_resolution_clock::time_point last_frame_time;
     const int max_updates_per_frame;
 
+
+#ifdef _WIN32
     // Double buffering variables for Windows Console
     std::vector<CHAR_INFO> backBuffer;
     COORD bufferSize;
     SMALL_RECT writeRegion;
     HANDLE hConsoleOutput;
+#else
+    // Double buffering variables for Linux Console
+    std::vector<char> backBuffer;
+    int bufferWidth;
+    int bufferHeight;
+#endif
+
+
+    
 
     // Private helper methods
     void initConsoleBuffer(int width, int height);
@@ -48,5 +67,15 @@ public:
     void update();
     void render();
     void run();
-	void clear() { system("cls"); }
+
+
+#ifdef _WIN32
+    //windows
+    void clear() { system("cls"); }
+#else
+    // linux
+	void clear() { system("clear"); }
+#endif
+
+	
 };
