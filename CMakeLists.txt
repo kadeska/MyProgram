@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(MyProgram VERSION 0.1.0)
+project(MyProgram VERSION 0.1.1)
 
 # If building on Windows with MinGW (GNU), prefer building static libraries.
 if(WIN32 AND CMAKE_C_COMPILER_ID STREQUAL "GNU")

@@ -1,3 +1,11 @@
+/**
+* Program Version: 0.1.1 - Alpha
+* This release is compatable with Windows, and also Linux systems by using Wine.
+* Currently doesnt support MacOS systems.
+* Currently doesnt build a linux executable, only .exe.
+*/
+
+
 #include <iostream>
 #include <filesystem>
 
