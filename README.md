@@ -23,7 +23,7 @@ Some console app
 * * Then use "cmake --build build/release --config Release" to build
 * * Run using "./MyProgram" or "./MyProgram <server/client/default>"
     
-* * Executing the program without cmd arguments will bring you straight into the game. The following screen shot shows the current state of the game. A 2d map is generated with player and loot.
+* Executing the program without cmd arguments will bring you straight into the game. The following screen shot shows the current state of the game. A 2d map is generated with player and loot.
   ![alt text][game]
 
 * Run the program in a cmd prompt with cmd argument 'default' will prompt you with something like this
