@@ -19,18 +19,27 @@ Some console app
 
 ## Build and Run
 * Build with CMake
-* Run executable with or without arguments <server/client>.
-* * Executing the program without cmd arguments will bring you straight into the game. The following screen shot shows the current state of the game. A 2d map is generated with player and loot.
-  ![alt text][game]
+* * In the root dir configure Cmake using "cmake -S . -B build/release"
+* * Then use "cmake --build build/release --config Release" to build
+* * Run using "./MyProgram" or "./MyProgram <server/client/default>"
+
+
+## Screenshots
+* Executing the program without cmd arguments will bring you straight into the game. The following screen shot shows the current state of the game. A 2d map is generated with player and loot.
+
+![alt text][game]
 
 * Run the program in a cmd prompt with cmd argument 'default' will prompt you with something like this
-  ![alt text][default]
+
+![alt text][default]
 
 * Run the program in a cmd prompt with cmd argument 'server' will prompt you with something like this
-  ![alt text][server]
+
+![alt text][server]
 
 * Run the program in a cmd prompt with cmd argument 'client' will prompt you with something like this
-  ![alt text][client]
+
+![alt text][client]
 
 * enter 'map' command and the program will generate a 2D map using a cellular automata algorithm.
 * * (as of right now) this has been moved to be used in the game generation. Later I will add a map generation system for making custom maps.
