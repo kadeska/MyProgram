@@ -1,0 +1,28 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 19,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "Debug",
+      "hidden": false,
+      "generator": "Visual Studio 17 2022",
+      "buildDirectory": "${preset:workspace}/build/${name}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "Release",
+      "hidden": false,
+      "generator": "Visual Studio 17 2022",
+      "buildDirectory": "${preset:workspace}/build/${name}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ]
+}
