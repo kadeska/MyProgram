@@ -87,44 +87,61 @@ Helper::~Helper()
 void Helper::log(std::string logMsg)
 {
     //std::cout << "[Log]" << " " << logMsg << std::endl;
-    logRaw("[Log] " + logMsg + '\n');
+    log(logMsg, LogLevel::RAW);
 }
 
 void Helper::logError(std::string logMsg)
 {
     //std::cout << "\033[31m" << "[Error]" << " " << logMsg << "\033[0m" << std::endl;
-    logRaw("\033[31m [Error] " + logMsg + "\033[0m \n", logLevel.error);
+    log(logMsg, LogLevel::_ERROR);
 }
 
 void Helper::logWarning(std::string logMsg)
 {
     //std::cout << "\033[33m" << "[Warning]" << " " << logMsg << "\033[0m" << std::endl;
-    logRaw("\033[33m [Warning] " + logMsg + "\033[0m \n", logLevel.warning);
+    log(logMsg, LogLevel::WARNING);
 }
 
 void Helper::logInfo(std::string logMsg)
 {
     //std::cout << "\033[37m" << "[Info]" << " " << logMsg << "\033[0m" << std::endl;
-	logRaw("\033[37m [Info] " + logMsg + "\033[0m \n", logLevel.info);
+	log(logMsg, LogLevel::INFO);
 }
 
 void Helper::logDebug(std::string logMsg)
 {
     //std::cout << "\033[32m" << "[Debug]" << " " << logMsg << "\033[0m" << std::endl;
-    logRaw("\033[32m [Debug] " + logMsg + "\033[0m \n", logLevel.debug);
+    log(logMsg, LogLevel::DEBUG);
 }
 
-void Helper::logRaw(std::string logMsg, bool logLevel)
+void Helper::log(std::string logMsg, LogLevel _logLevel)
 {
-    if (logLevel) {
-        if (!inGame) 
-        {
-            std::cout << logMsg;
-        }
+    if (!canLog(_logLevel)) return; // Check if logging is enabled for this level
+
+    std::string prefix;
+
+    // Set up the prefix and color based on the log level
+    switch (_logLevel) {
+    case LogLevel::_ERROR:
+        prefix = consoleColors.red + "[Error] " + consoleColors.reset;
+        break;
+    case LogLevel::WARNING:
+        prefix = consoleColors.yellow + "[Warning] " + consoleColors.reset;
+        break;
+    case LogLevel::INFO:
+        prefix = consoleColors.white + "[Info] " + consoleColors.reset;
+        break;
+    case LogLevel::DEBUG:
+        prefix = consoleColors.green + "[Debug] " + consoleColors.reset;
+        break;
+    case LogLevel::RAW:
+        std::cout << logMsg;
         return;
+    default:
+        return; // Should not reach here
     }
-    //std::cout << "skip \n";
-    
+
+    std::cout << prefix << logMsg << std::endl; // Log message with prefix
 }
 
 void Helper::printArgs(int argc, const char *argv[])

@@ -33,7 +33,7 @@ int inputManager::waitForInput()
         printPrompt();
     }
     while (waitLoop) {
-        helper->logRaw("Please enter something > ");
+        helper->log("Please enter something > ", Helper::LogLevel::RAW);
         std::string entry;
         // Flush the output stream to ensure the prompt is displayed immediately
         std::cout << std::flush;
@@ -123,7 +123,7 @@ void inputManager::selectMode()
 	helper->logInfo("Mode selection not fully implemented yet.");
     while (modeSelection) 
     {
-        helper->logRaw("Select mode (server/client/default) > ");
+        helper->log("Select mode (server/client/default) > ", Helper::LogLevel::RAW);
         std::string entry;
         // Flush the output stream to ensure the prompt is displayed immediately
         std::cout << std::flush;
