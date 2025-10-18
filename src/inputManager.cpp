@@ -1,19 +1,20 @@
 #include "inputManager.hpp"
+
+#include "mapGenerator.hpp"
 #include "helper.hpp"
 
 #include "IOmanager.hpp"
 #include "client.hpp"
 #include "server.hpp"
-
 #include "game.hpp"
-#include "mapGenerator.hpp"
+
 
 
 bool waitLoop = false;
 bool modeSelection = false;
 
 
-void inputManager::initInputManager(Helper* _helper, IOmanager* _ioManager, mapGenerator* _mapGen)
+void InputManager::initInputManager(Helper* _helper, IOmanager* _ioManager, MapGenerator* _mapGen)
 {
     helper = _helper;
     ioManager = _ioManager;
@@ -21,7 +22,7 @@ void inputManager::initInputManager(Helper* _helper, IOmanager* _ioManager, mapG
 }
 
 
-int inputManager::waitForInput()
+int InputManager::waitForInput()
 {
     //std::cout << "Waiting for input..." << std::endl;
     helper->logInfo("Waiting for input... Type 'exit' to quit.");
@@ -54,7 +55,7 @@ int inputManager::waitForInput()
 
 
 
-bool inputManager::processInput(std::string& input)
+bool InputManager::processInput(std::string& input)
 {
     // if (input == "") {}
     if (input == "exit") {
@@ -93,7 +94,7 @@ bool inputManager::processInput(std::string& input)
             window.mainLoop();
             window.cleanup();
         }*/
-		Game* game = new Game(helper, ioManager, this, helper->entityMan, helper->entityGen);
+		Game* game = new Game(helper, ioManager, this, helper->entityMan, helper->entityGen, mapGen);
         game->run();
     }
 
@@ -105,7 +106,7 @@ bool inputManager::processInput(std::string& input)
 	return false;
 }
 
-int inputManager::printPrompt()
+int InputManager::printPrompt()
 {
     helper->logInfo("______________________");
     helper->logInfo("Welcome to my program.");
@@ -117,7 +118,7 @@ int inputManager::printPrompt()
     return 0;
 }
 
-void inputManager::selectMode()
+void InputManager::selectMode()
 {
 	modeSelection = true;
 	helper->logInfo("Mode selection not fully implemented yet.");

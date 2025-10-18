@@ -3,14 +3,18 @@
 #include <iostream>
 #include <string>
 
+
+
+//#include "game.hpp"
+
 // Forward declarations instead of includes
 class Helper;
 class IOmanager;
-class mapGenerator;
+class MapGenerator;
 
-class inputManager {
+class InputManager {
 public:
-    void initInputManager(Helper* _helper, IOmanager* _ioManager, mapGenerator* _mapGen);
+    void initInputManager(Helper* _helper, IOmanager* _ioManager, MapGenerator* _mapGen);
 
     int waitForInput();
 
@@ -23,5 +27,5 @@ public:
 
     Helper* helper;
     IOmanager* ioManager;
-    mapGenerator* mapGen;
+    MapGenerator* mapGen;
 };

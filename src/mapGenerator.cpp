@@ -9,12 +9,12 @@ const int INITIAL_WALL_CHANCE = 49; // Represents a % chance of being a wall.
 const int SMOOTHING_ITERATIONS = 2;
 const int SMOOTHING_THRESHOLD = 5; // A tile becomes a wall if it has 5 or more solid neighbors.
 
-mapGenerator::mapGenerator(IOmanager* _ioManager, Helper* _helper)
+MapGenerator::MapGenerator(IOmanager* _ioManager, Helper* _helper)
     : ioMan(_ioManager), helper(_helper) {
     // Constructor logic if needed
 }
 
-mapGenerator::~mapGenerator() {
+MapGenerator::~MapGenerator() {
     // Destructor logic if needed
 }
 
@@ -24,7 +24,7 @@ mapGenerator::~mapGenerator() {
  * @param width The width of the map to generate.
  * @param height The height of the map to generate.
  */
-void mapGenerator::generateMap(int width, int height) {
+void MapGenerator::generateMap(int width, int height) {
     // --- Setup for Randomization ---
     static std::random_device rd;
     static std::mt19937 gen(rd());
@@ -102,7 +102,7 @@ void mapGenerator::generateMap(int width, int height) {
  * @param bufferWidth The width of the buffer.
  * @param bufferHeight The height of the buffer.
  */
-void mapGenerator::renderMapToBuffer(std::vector<CHAR_INFO>& buffer, int bufferWidth, int bufferHeight) {
+void MapGenerator::renderMapToBuffer(std::vector<CHAR_INFO>& buffer, int bufferWidth, int bufferHeight) {
     int mapHeight = internalMap.size();
     int mapWidth = internalMap.empty() ? 0 : internalMap[0].length();
 
@@ -129,7 +129,7 @@ void mapGenerator::renderMapToBuffer(std::vector<CHAR_INFO>& buffer, int bufferW
  * @param bufferWidth The width of the buffer.
  * @param bufferHeight The height of the buffer.
  */
-void mapGenerator::renderMapToBuffer(std::vector<char>& buffer, int bufferWidth, int bufferHeight) {
+void MapGenerator::renderMapToBuffer(std::vector<char>& buffer, int bufferWidth, int bufferHeight) {
     int mapHeight = internalMap.size();
     int mapWidth = internalMap.empty() ? 0 : internalMap[0].length();
     for (int y = 0; y < bufferHeight; ++y) {

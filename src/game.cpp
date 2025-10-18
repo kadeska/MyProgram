@@ -1,8 +1,9 @@
 #include "include/game.hpp"
 
-Game::Game(Helper* _helper, IOmanager* _ioMan, inputManager* _inputMan,
-    EntityManager* _entityMan, EntityGenerator* _entityGen)
+Game::Game(Helper* _helper, IOmanager* _ioMan, InputManager* _inputMan,
+    EntityManager* _entityMan, EntityGenerator* _entityGen, MapGenerator* _mapGen)
     : helper(_helper), ioMan(_ioMan), inputMan(_inputMan), entityMan(_entityMan), entityGen(_entityGen),
+	mapGen(_mapGen), dt(0.0f),
     level(1), isRunning(true), fixed_delta_time(1.0f / 60.0f), time_accumulator(0.0f),
     last_frame_time(std::chrono::high_resolution_clock::now()), max_updates_per_frame(5)
 {
@@ -65,76 +66,8 @@ void Game::update() {
     //    mapGenerationTimer = 0.0f; // Reset the timer
     //}
 
-
-
-#ifdef _WIN32
-    if (GetAsyncKeyState(VK_ESCAPE)) { // Check for Escape key
-        exit(0);
-    }
-    if (GetAsyncKeyState('W')) {
-        std::cout << "'W' key is pressed" << std::endl;
-        //move player
-    }
-    if (GetAsyncKeyState('A')) {
-        std::cout << "'A' key is pressed" << std::endl;
-    }
-    if (GetAsyncKeyState('S')) {
-        std::cout << "'S' key is pressed" << std::endl;
-    }
-    if (GetAsyncKeyState('D')) {
-        std::cout << "'D' key is pressed" << std::endl;
-    }
-    if (GetAsyncKeyState('E')) {
-        std::cout << "'E' key is pressed" << std::endl;
-    }
-    if (GetAsyncKeyState('F')) {
-        std::cout << "'F' key is pressed" << std::endl;
-    }
-#else
-
-    int ch = getch();  // Get the pressed key
-
-    if (ch == 27) { // Escape key (ASCII 27)
-        endwin();   // End ncurses mode
-        exit(0);
-    }
-    switch (ch) {
-    case 'w':
-    case 'W':
-        std::cout << "'W' key is pressed" << std::endl;
-        // Move player
-        break;
-    case 'a':
-    case 'A':
-        std::cout << "'A' key is pressed" << std::endl;
-        break;
-    case 's':
-    case 'S':
-        std::cout << "'S' key is pressed" << std::endl;
-        break;
-    case 'd':
-    case 'D':
-        std::cout << "'D' key is pressed" << std::endl;
-        break;
-    case 'e':
-    case 'E':
-        std::cout << "'E' key is pressed" << std::endl;
-        break;
-    case 'f':
-    case 'F':
-        std::cout << "'F' key is pressed" << std::endl;
-        break;
-    default:
-        break;  // Do nothing if no recognized key is pressed
-    }
-#endif
-
-
-   
-
-
-
-
+    // Check input
+	checkInput();
 }
 
 void Game::render() {
@@ -210,4 +143,77 @@ void Game::run()
         next_frame_time += render_rate;
         std::this_thread::sleep_until(next_frame_time);
     }
+}
+
+
+void Game::checkInput() 
+{
+    // input check
+
+#ifdef _WIN32
+    if (GetAsyncKeyState(VK_ESCAPE)) { // Check for Escape key
+        exit(0);
+    }
+    if (GetAsyncKeyState('W')) {
+        std::cout << "'W' key is pressed" << std::endl;
+        //move player
+    }
+    if (GetAsyncKeyState('A')) {
+        std::cout << "'A' key is pressed" << std::endl;
+    }
+    if (GetAsyncKeyState('S')) {
+        std::cout << "'S' key is pressed" << std::endl;
+    }
+    if (GetAsyncKeyState('D')) {
+        std::cout << "'D' key is pressed" << std::endl;
+    }
+    if (GetAsyncKeyState('E')) {
+        std::cout << "'E' key is pressed" << std::endl;
+    }
+    if (GetAsyncKeyState('F')) {
+        std::cout << "'F' key is pressed" << std::endl;
+    }
+#else
+
+    int ch = getch();  // Get the pressed key
+
+    if (ch == 27) { // Escape key (ASCII 27)
+        endwin();   // End ncurses mode
+        exit(0);
+    }
+    switch (ch) {
+    case 'w':
+    case 'W':
+        std::cout << "'W' key is pressed" << std::endl;
+        // Move player
+        break;
+    case 'a':
+    case 'A':
+        std::cout << "'A' key is pressed" << std::endl;
+        break;
+    case 's':
+    case 'S':
+        std::cout << "'S' key is pressed" << std::endl;
+        break;
+    case 'd':
+    case 'D':
+        std::cout << "'D' key is pressed" << std::endl;
+        break;
+    case 'e':
+    case 'E':
+        std::cout << "'E' key is pressed" << std::endl;
+        break;
+    case 'f':
+    case 'F':
+        std::cout << "'F' key is pressed" << std::endl;
+        break;
+    default:
+        break;  // Do nothing if no recognized key is pressed
+    }
+#endif
+}
+
+void getPlayerSpawnLocation() 
+{
+	// get player spawn location
 }

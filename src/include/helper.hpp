@@ -18,8 +18,8 @@
 
 // Forward declarations
 class IOmanager;
-class inputManager;
-class mapGenerator;
+class InputManager;
+class MapGenerator;
 class EntityManager;
 class EntityGenerator;
 
@@ -94,8 +94,8 @@ coloring console output on Windows.
     std::filesystem::path configFile;
 
     IOmanager* ioMan;
-    inputManager* inputMan;
-    mapGenerator* mapGen;
+    InputManager* inputMan;
+    MapGenerator* mapGen;
     EntityManager* entityMan;
 	EntityGenerator* entityGen;
 

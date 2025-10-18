@@ -20,10 +20,10 @@
 
 
 
-class mapGenerator {
+class MapGenerator {
 private:
     IOmanager* ioMan;
-    Helper* helper;
+    
     const std::string mapFile = "data/map.txt";
     // seed increases chances of solid tile. Higher seed = more solid tiles.
     // e.g. seed = 1 means all tiles are solid, seed = 10 means 1 in 10 tiles are empty.
@@ -46,8 +46,9 @@ private:
 
 
 public:
-    mapGenerator(IOmanager* _ioManager, Helper* _helper);
-    ~mapGenerator();
+    Helper* helper;
+    MapGenerator(IOmanager* _ioManager, Helper* _helper);
+    ~MapGenerator();
     /**
      * @brief Generates a 2D map using a cellular automata algorithm.
      *

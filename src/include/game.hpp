@@ -27,9 +27,10 @@ private:
     // Pointers to your existing manager classes
     Helper* helper;
     IOmanager* ioMan;
-    inputManager* inputMan;
+    InputManager* inputMan;
     EntityManager* entityMan;
     EntityGenerator* entityGen;
+	MapGenerator* mapGen;
 
     // Time variables for game loop
     float dt;
@@ -61,12 +62,14 @@ private:
     void initConsoleBuffer(int width, int height);
 
 public:
-    Game(Helper* _helper, IOmanager* _ioMan, inputManager* _inputMan,
-        EntityManager* _entityMan, EntityGenerator* _entityGen);
+    Game(Helper* _helper, IOmanager* _ioMan, InputManager* _inputMan,
+        EntityManager* _entityMan, EntityGenerator* _entityGen, MapGenerator* _mapGen);
     ~Game();
     void update();
     void render();
     void run();
+    void checkInput();
+    void getPlayerSpawnLocation();
 
 
 #ifdef _WIN32
