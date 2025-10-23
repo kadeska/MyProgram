@@ -95,7 +95,7 @@ coloring console output on Windows.
 
     IOmanager* ioMan;
     InputManager* inputMan;
-    MapGenerator* mapGen;
+    //MapGenerator* mapGen;
     EntityManager* entityMan;
 	EntityGenerator* entityGen;
 

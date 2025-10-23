@@ -87,9 +87,7 @@ void MapGenerator::generateMap(int width, int height) {
 
     // --- STEP #04: Spawning Player ---
     helper->logInfo("STEP #04 : Spawning Player");
-    int playerSpawnY = height / 2;
-    int playerSpawnX = width / 2;
-    internalMap[playerSpawnY][playerSpawnX] = getTileType().player;
+    internalMap[playerSpawnX][playerSpawnY] = getTileType().player;
 }
 
 

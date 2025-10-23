@@ -1,4 +1,9 @@
 #include "include/game.hpp"
+#include "include/entity.hpp"
+
+std::vector<std::string> map;
+
+std::unique_ptr<Player> player;
 
 Game::Game(Helper* _helper, IOmanager* _ioMan, InputManager* _inputMan,
     EntityManager* _entityMan, EntityGenerator* _entityGen, MapGenerator* _mapGen)
@@ -13,7 +18,7 @@ Game::Game(Helper* _helper, IOmanager* _ioMan, InputManager* _inputMan,
 
 #ifdef _WIN32
     //windows
-    helper->mapGen->generateMap(bufferSize.X, bufferSize.Y);
+    mapGen->generateMap(bufferSize.X, bufferSize.Y);
 
 #else
     // linux
@@ -26,6 +31,18 @@ Game::Game(Helper* _helper, IOmanager* _ioMan, InputManager* _inputMan,
 
 Game::~Game()
 {
+}
+
+void Game::initEntities()
+{
+	player = entityGen->generatePlayer("Player 1", EntityTypes::PLAYER);
+    int px = getPlayerSpawnLocation().at(0);
+    int py = getPlayerSpawnLocation().at(1);
+    player->setPosition(px, py);
+    helper->logInfo("Created player. ID: " 
+        + std::to_string(player->getID()) 
+        + "Location: " + std::to_string(px) 
+        + " " + std::to_string(py));
 }
 
 void Game::initConsoleBuffer(int width, int height) {
@@ -78,9 +95,11 @@ void Game::render() {
         backBuffer[i].Char.AsciiChar = ' ';
         backBuffer[i].Attributes = FOREGROUND_GREEN; // Set default character color
     }
+    //helper->mapGen->generateMap(bufferSize.X, bufferSize.Y);
+	
 
     // 2. Render the map to the back buffer
-    helper->mapGen->renderMapToBuffer(backBuffer, bufferSize.X, bufferSize.Y);
+    mapGen->renderMapToBuffer(backBuffer, bufferSize.X, bufferSize.Y);
 
     // 3. Write the completed back buffer to the console in one operation
     WriteConsoleOutput(hConsoleOutput, backBuffer.data(), bufferSize, { 0, 0 }, &writeRegion);
@@ -106,6 +125,8 @@ void Game::render() {
 
 void Game::run()
 {
+    initEntities();
+
     clear();
     //helper->logAsGame("Game starting...");
 
@@ -135,7 +156,7 @@ void Game::run()
         if (updates_this_frame >= max_updates_per_frame) {
             helper->logAsGame("WARNING: Fixed update is falling behind!");
         }
-
+        
         // Perform rendering
         render();
 
@@ -150,28 +171,34 @@ void Game::checkInput()
 {
     // input check
 
+
 #ifdef _WIN32
     if (GetAsyncKeyState(VK_ESCAPE)) { // Check for Escape key
         exit(0);
     }
     if (GetAsyncKeyState('W')) {
-        std::cout << "'W' key is pressed" << std::endl;
-        //move player
+        //std::cout << "'W' key is pressed" << std::endl;
+        //move player up
+		movePlayer(0, -1);
+       
     }
     if (GetAsyncKeyState('A')) {
-        std::cout << "'A' key is pressed" << std::endl;
+        //std::cout << "'A' key is pressed" << std::endl;
+		movePlayer(-1, 0);
     }
     if (GetAsyncKeyState('S')) {
-        std::cout << "'S' key is pressed" << std::endl;
+        //std::cout << "'S' key is pressed" << std::endl;
+        movePlayer(0, 1);
     }
     if (GetAsyncKeyState('D')) {
-        std::cout << "'D' key is pressed" << std::endl;
+        //std::cout << "'D' key is pressed" << std::endl;
+        movePlayer(1, 0);
     }
     if (GetAsyncKeyState('E')) {
-        std::cout << "'E' key is pressed" << std::endl;
+        std::cout << "'E' key is pressed. Show inventory" << std::endl;
     }
     if (GetAsyncKeyState('F')) {
-        std::cout << "'F' key is pressed" << std::endl;
+        std::cout << "'F' key is pressed. Fight" << std::endl;
     }
 #else
 
@@ -213,7 +240,57 @@ void Game::checkInput()
 #endif
 }
 
-void getPlayerSpawnLocation() 
+// Returns player spawn location as {x, y}
+std::vector<int> Game::getPlayerSpawnLocation() {
+    // Get player spawn location
+    map = mapGen->getMap();
+
+    for (int i = 0; i < map.size(); i++) {
+        const auto& row = map.at(i); // Store the row in a variable for clarity
+        for (int x = 0; x < row.size(); x++) {
+            // Find character 'P' in the map
+            if (row.at(x) == mapGen->getTileType().player) {
+                helper->logAsGame("Found Location" + std::to_string(x) + " " + std::to_string(i));
+                return { x, i }; // Return found location as {x, y}
+            }
+        }
+    }
+
+    return {}; // Return an empty vector if player not found
+}
+
+bool Game::movePlayer(int _X, int _Y)
 {
-	// get player spawn location
+	int newX = player->getX() + _X;
+    int newY = player->getY() + _Y;
+
+    curTileType = mapGen->getTileType(player->getX(), player->getY());
+    nextTileType = mapGen->getTileType(newX, newY);
+
+    if (newX >= mapGen->getMaxX() || newY >= mapGen->getMaxY()) 
+    {
+        // Out of bounds
+        //return false to indicate cant move
+        return false;
+    }
+
+    if (nextTileType == mapGen->getTileType().solid) 
+    {
+        // Cant move into solid tile
+        return false;
+    }
+
+    if (nextTileType == mapGen->getTileType().loot) 
+    {
+        helper->logAsGame("Player found some loot!");
+		// Handle loot pickup logic here
+    }
+
+
+
+    // Move player
+    mapGen->setTileType(player->getX(), player->getY(), mapGen->getTileType().empty);
+    player->move(_X, _Y);
+    mapGen->setTileType(player->getX(), player->getY(), mapGen->getTileType().player);
+    return true;
 }

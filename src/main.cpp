@@ -38,6 +38,8 @@
 
 
 Helper* helper;
+MapGenerator* mapGen;
+Game* game;
 
 enum Role { UNKNOWN, SERVER, CLIENT };
 
@@ -47,8 +49,8 @@ static int init(int argc, const char* argv[]) {
     // wrap with try catch or check for nullptr
     helper = new Helper();
     helper->ioMan = new IOmanager(argc, argv, *helper);
-    helper->mapGen = new MapGenerator(helper->ioMan, helper);
-    helper->inputMan = new InputManager(helper, helper->ioMan, helper->mapGen);
+    mapGen = new MapGenerator(helper->ioMan, helper);
+    helper->inputMan = new InputManager(helper, helper->ioMan, mapGen);
     helper->entityMan = new EntityManager(helper);
     helper->entityGen = new EntityGenerator(helper->ioMan, helper);
 
@@ -142,7 +144,7 @@ int main(int argc, const char* argv[]) {
     }
     if (argc == 1) {
         std::cout << "No arguments provided. Entering game mode." << std::endl;
-        Game* game = new Game(helper, helper->ioMan, helper->inputMan, helper->entityMan, helper->entityGen, helper->mapGen);
+        game = new Game(helper, helper->ioMan, helper->inputMan, helper->entityMan, helper->entityGen, mapGen);
         game->run();
     }
 

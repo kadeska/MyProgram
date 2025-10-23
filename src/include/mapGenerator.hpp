@@ -37,6 +37,13 @@ private:
         char type = ' '; // e.g. '.', '#', 'L' (loot)
         bool isWalkable = false;
     } tile;
+    
+
+
+public:
+    Helper* helper;
+    MapGenerator(IOmanager* _ioManager, Helper* _helper);
+    ~MapGenerator();
     struct _tileType {
         char solid = '#';
         char empty = '.';
@@ -44,11 +51,10 @@ private:
         char player = 'P';
     } tileType;
 
+    int playerSpawnY = 20;
+    int playerSpawnX = 12;
 
-public:
-    Helper* helper;
-    MapGenerator(IOmanager* _ioManager, Helper* _helper);
-    ~MapGenerator();
+
     /**
      * @brief Generates a 2D map using a cellular automata algorithm.
      *
@@ -75,7 +81,11 @@ public:
 
     // Returns the tileType struct containing the tile characters.
     _tileType getTileType() { return tileType; }
-
+    char getTileType(int x, int y) { return internalMap[x][y]; }
+    void setTileType(int x, int y, char _tile) { internalMap[y][x] = _tile; }
+	std::vector<std::string> getMap() { return internalMap; }
+	int getMaxX() { return internalMap.at(0).size(); }
+	int getMaxY() { return internalMap.size(); }
 
 
 };

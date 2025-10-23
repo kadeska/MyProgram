@@ -65,11 +65,19 @@ public:
     Game(Helper* _helper, IOmanager* _ioMan, InputManager* _inputMan,
         EntityManager* _entityMan, EntityGenerator* _entityGen, MapGenerator* _mapGen);
     ~Game();
+    void initEntities();
     void update();
     void render();
     void run();
     void checkInput();
-    void getPlayerSpawnLocation();
+    std::vector<int> getPlayerSpawnLocation();
+	bool movePlayer(int _X, int _Y);
+
+
+    // the previous tile type before the player moved
+    char nextTileType;
+    // the current tile type
+    char curTileType;
 
 
 #ifdef _WIN32
