@@ -1,7 +1,7 @@
 #include "include/game.hpp"
 #include "include/entity.hpp"
 
-std::vector<std::string> map;
+//std::vector<std::string> map;
 
 std::unique_ptr<Player> player;
 
@@ -41,33 +41,35 @@ void Game::initEntities()
     player->setPosition(px, py);
     helper->logInfo("Created player. ID: " 
         + std::to_string(player->getID()) 
-        + "Location: " + std::to_string(px) 
-        + " " + std::to_string(py));
+        + " , Location: " + std::to_string(px) 
+        + " , " + std::to_string(py));
 }
 
 void Game::initConsoleBuffer(int width, int height) {
-#ifdef _WIN32
-    // Windows Initialization
-    bufferSize = { (short)width, (short)height };
-    writeRegion = { 0, 0, (short)(width - 1), (short)(height - 1) };
-    backBuffer.resize(width * height);
-    hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-#else
-    // Linux Initialization
-    bufferWidth = width;
-    bufferHeight = height;
-    backBuffer.resize(bufferWidth * bufferHeight, ' ');
+    // Rework buffer
+//#ifdef _WIN32
+//    // Windows Initialization
+//    bufferSize = { (short)width, (short)height };
+//    writeRegion = { 0, 0, (short)(width - 1), (short)(height - 1) };
+//    backBuffer.resize(width * height);
+//    hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+//#else
+//    // Linux Initialization
+//    bufferWidth = width;
+//    bufferHeight = height;
+//    backBuffer.resize(bufferWidth * bufferHeight, ' ');
+//
+//    // Set up terminal (optional: make it more interactive)
+//    std::cout << "\033[2J\033[H";  // Clear screen and move cursor to home position
+//
+//    initscr();              // Initialize ncurses mode
+//    cbreak();               // Disable line buffering
+//    noecho();               // Don't echo pressed keys
+//    keypad(stdscr, TRUE);   // Enable function keys and arrow keys
+//    nodelay(stdscr, TRUE);  // Make getch non-blocking
+//
+//#endif
 
-    // Set up terminal (optional: make it more interactive)
-    std::cout << "\033[2J\033[H";  // Clear screen and move cursor to home position
-
-    initscr();              // Initialize ncurses mode
-    cbreak();               // Disable line buffering
-    noecho();               // Don't echo pressed keys
-    keypad(stdscr, TRUE);   // Enable function keys and arrow keys
-    nodelay(stdscr, TRUE);  // Make getch non-blocking
-
-#endif
 }
 
 void Game::update() {
@@ -267,9 +269,18 @@ bool Game::movePlayer(int _X, int _Y)
     curTileType = mapGen->getTileType(player->getX(), player->getY());
     nextTileType = mapGen->getTileType(newX, newY);
 
-    if (newX >= mapGen->getMaxX() || newY >= mapGen->getMaxY()) 
+
+    ioMan->printToLogFile("Current Tile Type: " + std::string(1, curTileType) 
+		+ " Next Tile Type: " + std::string(1, nextTileType));
+	ioMan->printToLogFile("Player Position: X=" + std::to_string(player->getX()) 
+        + ", Y=" + std::to_string(player->getY()));
+
+
+    if (newX < 0 || newX >= mapGen->getMaxX() || newY < 0 || newY >= mapGen->getMaxY())
     {
         // Out of bounds
+		 ioMan->printToLogFile("MaxX: " + std::to_string(mapGen->getMaxX()) 
+             + " , MaxY: " + std::to_string(mapGen->getMaxY()));
         //return false to indicate cant move
         return false;
     }

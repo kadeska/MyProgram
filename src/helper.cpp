@@ -75,7 +75,7 @@
 Helper::Helper(/* args */)
 {
     // std::cout << "helper constructor" << std::endl;
-    logDebug("Helper constructor");
+    //logDebug("Helper constructor");
 }
 
 Helper::~Helper()
@@ -142,6 +142,11 @@ void Helper::log(std::string logMsg, LogLevel _logLevel)
     }
 
     std::cout << prefix << logMsg << std::endl; // Log message with prefix
+    if (ioMan != nullptr) 
+    {
+        ioMan->printToLogFile(prefix + logMsg); // Also log to file
+    }
+	
 }
 
 void Helper::printArgs(int argc, const char *argv[])

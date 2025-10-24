@@ -52,7 +52,7 @@ public:
      * If the proper amount of arguments are not given then the program will halt.
      * If there are no arguments given then the program will run without arguments. 
      */
-    IOmanager(int argc, const char* argv[], Helper& helper_ref);
+    IOmanager(int argc, const char* argv[], Helper* helper_ref);
     
     /**
 	 * read a config file containing config options and return true if file reads succesfully.
@@ -90,7 +90,7 @@ private:
     givenArgument givenArg;
     std::vector<givenArgument> givenArgs;
     
-    Helper& helper;
+    Helper* helper;
 
     
 };

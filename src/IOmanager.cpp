@@ -21,10 +21,16 @@
 
 // #include "include/commands.hpp"
 
-IOmanager::IOmanager(int argc, const char* argv[], Helper& helper_ref)
+
+
+bool isFirstLog = true;
+
+
+
+IOmanager::IOmanager(int argc, const char* argv[], Helper* helper_ref)
     : helper(helper_ref)
 {
-    helper.printArgs(argc, argv);
+    helper->printArgs(argc, argv);
 }
 
 bool IOmanager::readFileContent(std::string filename) {
@@ -34,20 +40,20 @@ bool IOmanager::readFileContent(std::string filename) {
 
     if (!inputFile.is_open()) {
         // std::cerr << "Error: Could not open file " << filename << std::endl;
-        helper.logError("Could not open file: " + filename);
-        helper.logWarning("File does not exist");
+        helper->logError("Could not open file: " + filename);
+        helper->logWarning("File does not exist");
         return false;
     }
 
-    helper.logInfo("printing file: " + filename);
+    helper->logInfo("printing file: " + filename);
     std::string line;
     while (std::getline(inputFile, line)) {
-        helper.logDebug("Read line from file: '" + line + "' (Length: " + std::to_string(line.length()) + ")");
+        helper->logDebug("Read line from file: '" + line + "' (Length: " + std::to_string(line.length()) + ")");
         //data.availableArgs.push_back(line);
     }
 
     inputFile.close();
-    helper.logInfo("Done printing file.");
+    helper->logInfo("Done printing file.");
     
     return true;
 }
@@ -124,7 +130,13 @@ bool IOmanager::writeFileFromExePath(const std::filesystem::path& relativePath, 
 }
 
 int IOmanager::printToLogFile(std::string logMsg) {
-    writeFileFromExePath(helper.serverLogFile, logMsg + '\n', FileWriteMode::Append);
+    if (isFirstLog) 
+    {
+        writeFileFromExePath(helper->logFile, logMsg + '\n', FileWriteMode::Overwrite);
+        isFirstLog = false;
+        return 0;
+    }
+    writeFileFromExePath(helper->logFile, logMsg + '\n', FileWriteMode::Append);
     return 0;
 }
 
@@ -148,7 +160,7 @@ int IOmanager::test() {
 
 void IOmanager::saveEntityToFile(std::unique_ptr<Entity> _entity) 
 {
-    helper.logDebug("[EntityManager] Saving entity to file. Entity name= '" + _entity->getName()
+    helper->logDebug("[EntityManager] Saving entity to file. Entity name= '" + _entity->getName()
         + "', Entity type= " + std::to_string(_entity->getType()));
     /*writeFileFromExePath("data/entitySave.txt", */
 	std::string path = "data/entity_" + std::to_string(_entity->getID()) + ".txt";

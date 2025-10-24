@@ -8,6 +8,7 @@
 
 #include "IOmanager.hpp"
 #include "helper.hpp"
+#include "Tile.hpp"
 
 
 #ifdef _WIN32
@@ -31,12 +32,16 @@ private:
     uint16_t lootChance = 10; // percentage
 
     // Store the map internally as a 2D array of chars
-    std::vector<std::string> internalMap;
+    //std::vector<std::string> internalMap;
 
-    struct _tile {
-        char type = ' '; // e.g. '.', '#', 'L' (loot)
-        bool isWalkable = false;
-    } tile;
+	// map represented as 2D vector of Tile structs
+    std::vector<std::vector<Tile>> map;
+
+
+    //struct _tile {
+    //    char type = ' '; // e.g. '.', '#', 'L' (loot)
+    //    bool isWalkable = false;
+    //} tile;
     
 
 
@@ -44,12 +49,12 @@ public:
     Helper* helper;
     MapGenerator(IOmanager* _ioManager, Helper* _helper);
     ~MapGenerator();
-    struct _tileType {
-        char solid = '#';
-        char empty = '.';
-        char loot = 'L';
-        char player = 'P';
-    } tileType;
+    //struct _tileType {
+    //    char solid = '#';
+    //    char empty = '.';
+    //    char loot = 'L';
+    //    char player = 'P';
+    //} tileType;
 
     int playerSpawnY = 20;
     int playerSpawnX = 12;
@@ -81,7 +86,15 @@ public:
 
     // Returns the tileType struct containing the tile characters.
     _tileType getTileType() { return tileType; }
-    char getTileType(int x, int y) { return internalMap[x][y]; }
+    char getTileType(int x, int y) 
+    {
+        if (x < 0 || y < 0 || x >= internalMap.size() || y >= internalMap[x].size()) 
+        {
+            return NULL;
+        }
+        
+        return internalMap[x][y]; 
+    }
     void setTileType(int x, int y, char _tile) { internalMap[y][x] = _tile; }
 	std::vector<std::string> getMap() { return internalMap; }
 	int getMaxX() { return internalMap.at(0).size(); }

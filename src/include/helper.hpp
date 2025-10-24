@@ -25,7 +25,6 @@ class EntityGenerator;
 
 class Helper
 {
-private:
 public:
     /*
 WinConsoleColors struct contains ANSI escape codes for

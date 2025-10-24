@@ -48,7 +48,7 @@ enum Role { UNKNOWN, SERVER, CLIENT };
 static int init(int argc, const char* argv[]) {
     // wrap with try catch or check for nullptr
     helper = new Helper();
-    helper->ioMan = new IOmanager(argc, argv, *helper);
+    helper->ioMan = new IOmanager(argc, argv, helper);
     mapGen = new MapGenerator(helper->ioMan, helper);
     helper->inputMan = new InputManager(helper, helper->ioMan, mapGen);
     helper->entityMan = new EntityManager(helper);
@@ -67,8 +67,8 @@ static int init(int argc, const char* argv[]) {
     if (helper->ioMan->writeFileFromExePath(helper->configFile, "setting=value\nversion=1.0", FileWriteMode::Overwrite)) {
         std::cout << "Successfully created data/config.ini" << std::endl;
     }
-    helper->ioMan->readFileContent(helper->configFile.string());
-    helper->ioMan->readFileContent(helper->logFile.string());
+    //helper->ioMan->readFileContent(helper->configFile.string());
+    //helper->ioMan->readFileContent(helper->logFile.string());
 
     return 0;
 }

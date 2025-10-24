@@ -42,18 +42,27 @@ private:
     const int max_updates_per_frame;
 
 
-#ifdef _WIN32
-    // Double buffering variables for Windows Console
-    std::vector<CHAR_INFO> backBuffer;
-    COORD bufferSize;
-    SMALL_RECT writeRegion;
-    HANDLE hConsoleOutput;
-#else
-    // Double buffering variables for Linux Console
-    std::vector<char> backBuffer;
-    int bufferWidth;
-    int bufferHeight;
-#endif
+    // Rework buffer
+
+//#ifdef _WIN32
+//    // Double buffering variables for Windows Console
+//    std::vector<CHAR_INFO> backBuffer;
+//    COORD bufferSize;
+//    SMALL_RECT writeRegion;
+//    HANDLE hConsoleOutput;
+//#else
+//    // Double buffering variables for Linux Console
+//    std::vector<char> backBuffer;
+//    int bufferWidth;
+//    int bufferHeight;
+//#endif
+
+
+    // New buffer
+    std::vector<char> mapBuffer;
+    // buffer width and height
+    int bufferWidth, bufferHeight;
+    //Tile tile;
 
 
     
