@@ -19,9 +19,9 @@ public:
 	EntityID getID() const { return Entity::getID(); }
 	int getHealth() const { return health; }
 	void setHealth(int _health) { health = _health; }
-	//Gets the current X value of the player on the map
+	//Gets the current X value of the player
 	int getX() const { return x; }
-	// Gets the current Y value of the player on the map
+	// Gets the current Y value of the player
 	int getY() const { return y; }
 	// set the player location. Be carful when using this function, it has no checks. This function should only be used after a check.
 	void setPosition(int _x, int _y) { x = _x; y = _y; }

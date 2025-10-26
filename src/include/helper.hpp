@@ -68,7 +68,8 @@ coloring console output on Windows.
     bool inGame = false;
 
     /**
-    Function to log a raw message without any formatting(RAW) or color. basicly a wrapper for std::cout.
+    Function to log a raw message without any formatting(RAW) or color. 
+    basicly a wrapper for std::cout.
     */
     void log(std::string logMsg);
     void logError(std::string logMsg);

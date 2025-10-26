@@ -136,6 +136,7 @@ void Helper::log(std::string logMsg, LogLevel _logLevel)
         break;
     case LogLevel::RAW:
         std::cout << logMsg;
+        //std::printf(logMsg.c_str());
         return;
     default:
         return; // Should not reach here

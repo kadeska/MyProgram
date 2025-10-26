@@ -94,7 +94,7 @@ bool InputManager::processInput(std::string& input)
             window.mainLoop();
             window.cleanup();
         }*/
-		Game* game = new Game(helper, ioManager, this, helper->entityMan, helper->entityGen, mapGen);
+		Game* game = new Game(10, 10, helper, ioManager, this, helper->entityMan, helper->entityGen, mapGen);
         game->run();
     }
 

@@ -43,14 +43,14 @@ std::unique_ptr<Entity> EntityGenerator::generateEntity(std::string _name, Entit
     return newEntity; // Ownership is transferred to the caller
 }
 
-std::unique_ptr<Player> EntityGenerator::generatePlayer(std::string _name, EntityTypes::Type _type)
+std::unique_ptr<Player> EntityGenerator::generatePlayer(std::string _name, EntityTypes::Type _type, int _x, int _y)
 {
     std::unique_ptr<Player> playerEntity;
     if (_type == EntityTypes::PLAYER)
     {
         helper->logAsGenerator("Generating new player");
         // Use std::make_unique to safely create a Player object on the heap
-        playerEntity = std::make_unique<Player>(nextEntityID++, _type, _name, 100, 20, 12);
+        playerEntity = std::make_unique<Player>(nextEntityID++, _type, _name, 100, _x, _y);
     }
     else {
         // Throw an exception for unsupported types

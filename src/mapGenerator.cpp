@@ -12,10 +12,12 @@ const int SMOOTHING_THRESHOLD = 5; // A tile becomes a wall if it has 5 or more 
 MapGenerator::MapGenerator(IOmanager* _ioManager, Helper* _helper)
     : ioMan(_ioManager), helper(_helper) {
     // Constructor logic if needed
+	//map = std::vector<std::vector<Tile>>(10, std::vector<Tile>(10, Tile('.', false)));
 }
 
 MapGenerator::~MapGenerator() {
     // Destructor logic if needed
+    //map = nullptr;
 }
 
 /**
@@ -25,24 +27,37 @@ MapGenerator::~MapGenerator() {
  * @param height The height of the map to generate.
  */
 void MapGenerator::generateMap(int width, int height) {
+    mapSizeX = width;
+    mapSizeY = height;
+
+
     // --- Setup for Randomization ---
+
     static std::random_device rd;
     static std::mt19937 gen(rd());
     std::uniform_int_distribution<> initialDist(1, 100);
 
-    internalMap.clear();
-    internalMap.resize(height, std::string(width, ' '));
-    helper->logInfo("Generating map of size " + std::to_string(width) + "x" + std::to_string(height));
+	// --- Initialize the internal map ---
+    map = std::vector<std::vector<Tile>>(mapSizeX, std::vector<Tile>(mapSizeY, Tile('.', false)));
+
+
+    //map = std::vector<std::vector<Tile>>();
+    //map.resize(mapSizeX * mapSizeY);
+
+
+    //internalMap.clear();
+    //internalMap.resize(height, std::string(width, ' '));
+    helper->logInfo("Generating map of size: " + std::to_string(width) + "x" + std::to_string(height));
 
     // --- STEP #01: Initial map randomization with borders ---
     helper->logInfo("STEP #01 : Initial Randomization");
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             if (y == 0 || y == height - 1 || x == 0 || x == width - 1) {
-                internalMap[y][x] = getTileType().solid;
+                map[x][y] = tileList.solid;
             }
             else {
-                internalMap[y][x] = (initialDist(gen) <= INITIAL_WALL_CHANCE) ? getTileType().solid : getTileType().empty;
+                map[y][x] = (initialDist(gen) <= INITIAL_WALL_CHANCE) ? tileList.solid : tileList.empty;
             }
         }
     }
@@ -50,23 +65,23 @@ void MapGenerator::generateMap(int width, int height) {
     // --- STEP #02: Cellular automata smoothing ---
     helper->logInfo("STEP #02 : Smoothing Floor");
     for (int i = 0; i < SMOOTHING_ITERATIONS; ++i) {
-        std::vector<std::string> tempMap = internalMap; // Use a temporary map for each smoothing pass
+        std::vector<std::vector<Tile>> tempMap = map; // Use a temporary map for each smoothing pass
         for (int y = 1; y < height - 1; ++y) {
             for (int x = 1; x < width - 1; ++x) {
                 int solidNeighbors = 0;
                 for (int dy = -1; dy <= 1; ++dy) {
                     for (int dx = -1; dx <= 1; ++dx) {
                         if (dx == 0 && dy == 0) continue;
-                        if (tempMap[y + dy][x + dx] == getTileType().solid) {
+                        if (tempMap[y + dy][x + dx].tile == tileList.solid.tile) {
                             solidNeighbors++;
                         }
                     }
                 }
                 if (solidNeighbors >= SMOOTHING_THRESHOLD) {
-                    internalMap[y][x] = getTileType().solid;
+                    map[y][x] = tileList.solid;
                 }
                 else {
-                    internalMap[y][x] = getTileType().empty;
+                    map[y][x] = tileList.empty;
                 }
             }
         }
@@ -77,9 +92,9 @@ void MapGenerator::generateMap(int width, int height) {
     std::uniform_int_distribution<> lootDist(1, 1000);
     for (int y = 1; y < height - 1; ++y) {
         for (int x = 1; x < width - 1; ++x) {
-            if (internalMap[y][x] == getTileType().empty) {
+            if (map[y][x].tile == tileList.empty.tile) {
                 if (lootDist(gen) <= lootChance) {
-                    internalMap[y][x] = getTileType().loot;
+                    map[y][x] = tileList.loot;
                 }
             }
         }
@@ -87,61 +102,74 @@ void MapGenerator::generateMap(int width, int height) {
 
     // --- STEP #04: Spawning Player ---
     helper->logInfo("STEP #04 : Spawning Player");
-    internalMap[playerSpawnX][playerSpawnY] = getTileType().player;
+    map[playerSpawnX][playerSpawnY] = tileList.player;
 }
 
 
-#ifdef _WIN32
+//#ifdef _WIN32
 // Windows
 /**
- * @brief Renders the map to a buffer for display.
+ * @brief Assigns the map to a buffer for display.
  *
- * @param buffer The character buffer to render to.
+ * @param buffer The buffer to render.
  * @param bufferWidth The width of the buffer.
  * @param bufferHeight The height of the buffer.
  */
-void MapGenerator::renderMapToBuffer(std::vector<CHAR_INFO>& buffer, int bufferWidth, int bufferHeight) {
-    int mapHeight = internalMap.size();
-    int mapWidth = internalMap.empty() ? 0 : internalMap[0].length();
+void MapGenerator::assignMapToBuffer(std::vector<std::vector<Tile>>& buffer, int bufferWidth, int bufferHeight) 
+{
 
-    for (int y = 0; y < bufferHeight; ++y) {
-        for (int x = 0; x < bufferWidth; ++x) {
-            CHAR_INFO& cell = buffer[y * bufferWidth + x];
-            if (y < mapHeight && x < mapWidth) {
-                cell.Char.AsciiChar = internalMap[y][x];
-                cell.Attributes = FOREGROUND_GREEN | FOREGROUND_INTENSITY;
-            }
-            else {
-                cell.Char.AsciiChar = ' ';
-                cell.Attributes = FOREGROUND_GREEN;
-            }
+    if (bufferWidth < mapSizeX || bufferHeight < mapSizeY) {
+        throw std::out_of_range("Buffer dimensions are too small for the map.");
+    }
+
+    for (int x = 0; x < mapSizeX; x++) 
+    {
+        for (int y = 0; y < mapSizeY; y++) 
+        {
+            buffer[x][y] = map[x][y];
         }
     }
 }
-#else
-// linux
-/**
- * @brief Renders the map to a buffer for display.
- *
- * @param buffer The character buffer to render to.
- * @param bufferWidth The width of the buffer.
- * @param bufferHeight The height of the buffer.
- */
-void MapGenerator::renderMapToBuffer(std::vector<char>& buffer, int bufferWidth, int bufferHeight) {
-    int mapHeight = internalMap.size();
-    int mapWidth = internalMap.empty() ? 0 : internalMap[0].length();
-    for (int y = 0; y < bufferHeight; ++y) {
-        for (int x = 0; x < bufferWidth; ++x) {
-            if (y < mapHeight && x < mapWidth) {
-                buffer[y * bufferWidth + x] = internalMap[y][x];
-            }
-            else {
-                buffer[y * bufferWidth + x] = ' ';
-            }
+//#else
+//// linux
+///**
+// * @brief Renders the map to a buffer for display.
+// *
+// * @param buffer The character buffer to render to.
+// * @param bufferWidth The width of the buffer.
+// * @param bufferHeight The height of the buffer.
+// */
+//void MapGenerator::renderMapToBuffer(std::vector<char>& buffer, int bufferWidth, int bufferHeight) {
+//    int mapHeight = internalMap.size();
+//    int mapWidth = internalMap.empty() ? 0 : internalMap[0].length();
+//    for (int y = 0; y < bufferHeight; ++y) {
+//        for (int x = 0; x < bufferWidth; ++x) {
+//            if (y < mapHeight && x < mapWidth) {
+//                buffer[y * bufferWidth + x] = internalMap[y][x];
+//            }
+//            else {
+//                buffer[y * bufferWidth + x] = ' ';
+//            }
+//        }
+//    }
+//}
+//#endif
+
+
+std::string MapGenerator::getMapBuffer() { return mapBuffer; }
+
+void MapGenerator::sendMapToBuffer()
+{
+    for (int x = 0; x < mapSizeX; x++) 
+    {
+        for (int y = 0; y < mapSizeY; y++) 
+        {
+            //char tileChar = map[x][y].tile;
+            //helper->logAsGenerator("tileChar: " + tileChar);
+            mapBuffer += map[x][y].tile;// tileChar;
         }
+        mapBuffer += '\n';
     }
 }
-#endif
 
-
-
+std::vector<std::vector<Tile>> MapGenerator::getMap() { return map; }

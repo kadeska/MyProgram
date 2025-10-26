@@ -59,22 +59,19 @@ private:
 
 
     // New buffer
-    std::vector<char> mapBuffer;
+    //std::vector<std::vector<Tile>> mapBuffer;
     // buffer width and height
-    int bufferWidth, bufferHeight;
+    //int bufferWidth, bufferHeight;
+	int mapWidth, mapHeight;
     //Tile tile;
 
 
-    
-
-    // Private helper methods
-    void initConsoleBuffer(int width, int height);
-
 public:
-    Game(Helper* _helper, IOmanager* _ioMan, InputManager* _inputMan,
+    Game(int _mapWidth, int _mapHeight, Helper* _helper, IOmanager* _ioMan, InputManager* _inputMan,
         EntityManager* _entityMan, EntityGenerator* _entityGen, MapGenerator* _mapGen);
     ~Game();
     void initEntities();
+    void initBuffer(int width, int height);
     void update();
     void render();
     void run();

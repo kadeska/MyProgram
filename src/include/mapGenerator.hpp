@@ -30,12 +30,17 @@ private:
     // e.g. seed = 1 means all tiles are solid, seed = 10 means 1 in 10 tiles are empty.
     uint16_t seed = 2;
     uint16_t lootChance = 10; // percentage
+    
 
     // Store the map internally as a 2D array of chars
     //std::vector<std::string> internalMap;
 
+    // map dimensions
+    int mapSizeX, mapSizeY;
 	// map represented as 2D vector of Tile structs
     std::vector<std::vector<Tile>> map;
+    // use a string for buffer.
+    std::string mapBuffer;
 
 
     //struct _tile {
@@ -49,15 +54,19 @@ public:
     Helper* helper;
     MapGenerator(IOmanager* _ioManager, Helper* _helper);
     ~MapGenerator();
-    //struct _tileType {
-    //    char solid = '#';
-    //    char empty = '.';
-    //    char loot = 'L';
-    //    char player = 'P';
-    //} tileType;
 
-    int playerSpawnY = 20;
-    int playerSpawnX = 12;
+    
+
+    int playerSpawnY;
+    int playerSpawnX;
+
+
+    struct TileList {
+        Tile solid = Tile('#', true);
+        Tile empty = Tile('.', false);
+        Tile loot = Tile('L', false);
+        Tile player = Tile('P', true);
+    } tileList;
 
 
     /**
@@ -76,7 +85,7 @@ public:
     // Modified `printMap` to use a `CHAR_INFO` buffer
 
 #ifdef _WIN32
-    void renderMapToBuffer(std::vector<CHAR_INFO>& buffer, int bufferWidth, int bufferHeight);
+    void assignMapToBuffer(std::vector<std::vector<Tile>>& buffer, int bufferWidth, int bufferHeight);
 #else
 // linux specific function
 	void renderMapToBuffer(std::vector<char>& buffer, int bufferWidth, int bufferHeight);
@@ -85,20 +94,27 @@ public:
     
 
     // Returns the tileType struct containing the tile characters.
-    _tileType getTileType() { return tileType; }
+    //_tileType getTileType() { return tileType; }
+
+
     char getTileType(int x, int y) 
     {
-        if (x < 0 || y < 0 || x >= internalMap.size() || y >= internalMap[x].size()) 
+        if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY)
         {
-            return NULL;
+            return ' ';
         }
         
-        return internalMap[x][y]; 
+        return map[x][y].tile; 
     }
-    void setTileType(int x, int y, char _tile) { internalMap[y][x] = _tile; }
-	std::vector<std::string> getMap() { return internalMap; }
-	int getMaxX() { return internalMap.at(0).size(); }
-	int getMaxY() { return internalMap.size(); }
+
+    void setTile(int x, int y, Tile _tile) { map[y][x] = _tile; }
+    std::vector<std::vector<Tile>> getMap();
+    std::string getMapBuffer();
+	// Can be used to set the map buffer, or clear it by default.
+	void setMapBuffer(std::string _mapBuffer = "") { mapBuffer = _mapBuffer; }
+    void sendMapToBuffer();
+	int getMaxX() { return mapSizeX; }
+    int getMaxY() { return mapSizeY; }
 
 
 };

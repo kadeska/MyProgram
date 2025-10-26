@@ -144,7 +144,7 @@ int main(int argc, const char* argv[]) {
     }
     if (argc == 1) {
         std::cout << "No arguments provided. Entering game mode." << std::endl;
-        game = new Game(helper, helper->ioMan, helper->inputMan, helper->entityMan, helper->entityGen, mapGen);
+        game = new Game(20, 20, helper, helper->ioMan, helper->inputMan, helper->entityMan, helper->entityGen, mapGen);
         game->run();
     }
 
